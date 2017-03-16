@@ -1,18 +1,18 @@
 \label{key}\section{Introduction}
-State of the art asymmetric cryptosystems compared with usage of sufficient long Keys are considered as "`safe"' with a view on current computer systems. This turns immediately if quantum computers enter the scene. But why is this the case? In this paper I briefly show up the main differences between normal computer systems and quantum computers, show up why state of the art cryptosystems like RSA and ECC not save in the quantum computation world. In addtion to that I give a detailed introduction to the McEliece Cryptosystem explain the strengs and downsides of the algortihm and give some details about the current developments about codes which can be used for the system.
+State of the art asymmetric cryptosystems compared with usage of sufficient long Keys are considered as "safe" on current computer systems. This changes immediately when quantum computers enter the scene. But why is this the case? In this paper I briefly present the main differences between normal computer systems and quantum computers and why state of the art cryptosystems like RSA and ECC are not save in the quantum computation world. In addition to that I, present a extensive introduction to the McEliece Cryptosystem explain the strengths and downsides of the algorithm and give some details about the developments of codes which can be used for the system.
 
 \label{conv_comp_vs_quan_comp}
-Since decades computer systems are seen as digital circuits based on the rules of physics. A bit in this systems is seen as a value of voltage. If this value is above a certain level the binary representation is one otherwise it's zero. 
-In quantum computers information is handled in binary too. The main difference between the bit representation and the quantum bit representation (so called qubit) is that in addition to the two states zero and one, there are several more states which one qubit can reach due to a superposition. This means that a qubit is not either in state one or in state zero but in theory can have an arbitrary number of different states. All these states can appear with an certain propability. Each of these states is able compute one possibility of a NP hard problem. 
+Since decades computer systems have been seen as digital circuits based on the rules of physics. A bit in this systems is seen as a value of voltage. If this value is above a certain, level the binary representation is one, otherwise it's zero. 
+On quantum computers, information is handled in binary, too. The main difference between the bit representation and the quantum bit representation (so called qubit) is that in addition to the two states zero and one, there are several more states which one qubit can reach due to a superposition. This means that a qubit is not either in state one or in state zero but in theory can have an arbitrary number of different states. All these states can appear with an certain probability. Each of these states is able to compute one possibility of a NP hard problem. 
 
-Due to this fact quantum computer are able to solve problems which are NP hard in sense of complexity theory much faster than traditional computers. 
+Due to this fact, quantum computers are able to solve problems which are NP hard in sense of complexity theory much faster than traditional computers. 
 
-One of these computational problems which are traditionally hard to solve is the prime factorization problem which is in serveral variations the core of many public key algorithms such as the RSA Cryptosystem. 
-The second huge category, the elliptic curves cryptography is even more affected by this problem too because the logarithm of a finite field of an elliptic curve can be computed efficient and can be broken in less time compared to the RSA algorithem  because of lower keysizes. 
-In Conclusion there is no established asymmetric crypto scheme which is post quantum resistant and a completely different approaches are needed. 
+One of these computational problems, which are traditionally hard to solve, is the prime factorization problem which is in serveral variations the core of many public key algorithms such as the RSA cryptosystem. 
+The second main category, the elliptic curves cryptography is even more affected by this problem as the logarithm of a finite field of an elliptic curve can be computed efficiently and can be broken in less time compared to the RSA algorithm  because of lower keysizes. 
+In conclusion, there is no established asymmetric cryptoscheme which is post quantum resistant. Therefore completely different approaches are needed. 
 
 \subsection*{Outline}
-In \autoref{post_quantum} some background information regarding post quantum cryptography are given. With help the algorithm of Shor the principle of quantum cryptography is described more into detail. \autoref{mceliece} takes a detailed look into the McEliece crypto system followed by the Niederreither cryptosystem in \todo{make label}. 
+In \autoref{post_quantum}, some background information regarding post quantum cryptography is given. With help of Shors algorithm the principle of quantum cryptography is described more precisely. \autoref{mceliece} takes a detailed look into the McEliece crypto system followed by the Niederreither cryptosystem in \todo{make label}. 
 
 %1. State of the art cryptography vs. Post quantum cryptography schreiben
 %2. Shoor überarbeiten
@@ -34,25 +34,25 @@ In \autoref{post_quantum} some background information regarding post quantum cry
 \section{Post quantum cryptography}
 \label{post_quantum}
 \todo[inline]{What makes cryptosystems strong?}
-To understand the principles of post quantum cryptograpy algorithms there are some fundamentals methods required. We see from Shoors Algorithm in \ref{shoor} that cryptgraphy based on integer factorization or discrete logarithm problem no longer holds on quantum computers. There for other algorithm types are needed which are shortly decribed in \ref{pqalgcand}.   
+In order to reach post quantum proof cryptographic algorithms, some fundamentally different then the established ones are required. Shors Algorithm in \ref{shoor} reveals that cryptography based on integer factorization or the discrete logarithm problem is no longer an issue for quantum computers. Therefore other algorithm types are needed which are shortly described in \ref{pqalgcand}.   
 
-\subsection{Shoors Algorithm}
+\subsection{Shors Algorithm}
 \label{shoor}
-Peter Shoor gave in 1994 an algorithm which is able to factorize a large number. On quantum computers for an composite number n this algorithm this algorithm only needs log n qubits and has a runtime of XXXX %O\(\(log n\)\³\)
-for finding on non trivial factor of n. 
-\todo{algorithmus bschreiben}
+Peter Shor presented in 1994 an algorithm which is able to factorize a composite number n into its prime factors. This algorithm is especially designed for quantum computers on which it only needs $log n$ qubits and has a runtime of $O((log n)^3)$ for finding a non trivial factor of n. 
+
 
 
 \subsubsection{Procedure}
-Shors algorithm divides into a classical part which can be executed on a conventional computer and quantum part which have to be executed on an quantum computer to do the computation in efficient time. 
+\todo{review section --> more abstract}
+Shors algorithm divides into a classical part which can be executed on a conventional computer and a quantum part which has to be executed on a quantum computer in order tp perform the computation efficiently. 
 
 The basic idea is that the classical part reduces the problem while the quantum part finds the order of the group in which n is. 
 \paragraph{Classical part}
-The classical part of the algorithm contains mainly computation of the greatest common devisor of a randomly selected number lower than n and n itself. Now we need to compute the order r of x and there the quantum part (see below) enters the scene. The classical part is executed in a loop while the order r is odd or x to the power of r/2 is equivalent to -1 mod n  \todo{why?} \todo{make formula beautiful}
-If this is not the case the gcd of x \^ (r / 2) -1 n is computed.
+The classical part of the algorithm mainly contains computation of the greatest common devisor of a randomly selected number lower than $n$ and $n$ itself. Now we need to compute the order $r$ of $x$ which is where the quantum part emerges. The classical part is executed in a loop while the order $r$ is odd or $x$ to the power of $r/2$ is equivalent to $-1 mod n$  \todo{why?} \todo{make formula beautiful}
+If this is not the case the gcd of $x^(r / 2) -1$ n is computed.
 \paragraph{Quantum part}
-At first there is a q detemined which is a power of 2 and lies between n2 and 2 n2. 
-A random a which is lower than n is selected and the input quantim register is initialized with all states of a mod q. \todo{formel --> wiki}
+At first there a $q$ is determined which is a power of $2$ and lies between $n2$ and $2 n2$. 
+A random $a$ which is lower than n is selected and the input quantum register is initialized with all states of $a mod q$. \todo{formel}
 The output quantum register is initialized with all states of xa(mod n). 
 
 A quantum Fourier transformation is computed on the input register. 
@@ -60,45 +60,48 @@ A quantum Fourier transformation is computed on the input register.
 The result values are gathered from the input register. 
 
 \todo{vllt. doch abstrakter}
-To sum up things Shoors algorithm with support of a quantum computer is able to find the period of a prime in polynomial time. 
+To sum up Shors algorithm with support of a quantum computer is able to find the period of a prime in polynomial time. 
 
 With this algorithm all cryptography based on prime factorization can be broken by a quantum computer in polynomial time. 
 
-\subsubsection{Complexity of Shors Algorithm} \todo{on normal pc and on quantum pc}
-Considdering the complexity of Shors algorithm on quantum computer it's easy to see that there is a complexity of O(log n) which is in the class of BQP. This class is comparable to the class BPP on convetual computers. Facing this the an state of the art RSA key of 2048 bit length can be broken in xxxx. In case of elliptic curves crypto system it's even worse. Due to the principal of the algorithm ECC is gathering more security per bit keylength on an conventual computer and only has keys up to 512 bit. This is not the case on quantum computer which makes them even easier to break compared to RSA keys.
+\subsubsection{Complexity of Shors Algorithm} \todo[inline]{on normal pc and on quantum pc}
+Considering the complexity of Shors algorithm on quantum computers, it's easy to see that there is a complexity of $O(log n)$ which is in the class of BQP. This class is comparable to the class BPP on conventional computers. In this regard the an state of the art RSA key of 2048 bit length can be broken in xxxx\todo{kann solch eine Aussage treffen?}. In the case of elliptic curves cryptosystem it's even worse. Due to the principal of the algorithm ECC is gathering more security per bit keylength on a conventional computer and only has keys up to 512 bit. This is not the case on quantum computer which makes them even easier to break compared to RSA keys.
 \todo[inline]{BQP / BPP mit reinnehmen??? Könnte interessant sein. Unter oder neben Shor?}
 
 \subsection{Candidates for post quantum cryptography}
 \label{pqalgcand}
-In this section a slight overview over promising state of the art post quantum cryptoschemes based on \cite{bernstein2009introduction} is given. 
+In this section a short overview over promising state of the art post quantum cryptoschemes based on \cite{bernstein2009introduction} is given. 
 \paragraph*{Lattice-based cryptography}
-One of the most studied types of algorithm are the lattice based which exist in serveral variants. Algorithm works on a lattice over a n-dimensional finite Euclidian field $L$ with an strong periodicity property. A set of vectors sets up the basis of $L$ in the way that every element is uniquely represented. The cryptographic problem is to find the closest vector to an given lattice point e.g. by adding an error vector\cite{bernstein2009introduction}\cite{wiki:lattice}.
+One of the most studied types of algorithm is the lattice based cryptography which exists in several variants. Algorithm works on a lattice over a n-dimensional finite Euclidian field $L$ with a strong periodicity property. A set of vectors provides the basis of $L$ in the way that every element is uniquely represented. The cryptographic problem is to find the closest vector to a given lattice point e.g. by adding an error vector\cite{bernstein2009introduction}\cite{wiki:lattice}.
 \paragraph*{Multivariate cryptography}
-Multivariate cryptography is based on a multivariate polynomials over a finite field $F$ which are defined over both a ground and an extension field. In case of Solving systems they are NP-complete and due to this fact a candidate for post quantum cryptography. They are topic of studies for a long time too and promising especially for signature schemes\cite{bernstein2009introduction}\cite{wiki:multi}.
+Multivariate cryptography is based on a multivariate polynomials over a finite field $F$ which are defined over both a ground and an extension field. In the case of solving systems they are NP-complete and due to this fact a candidate for post quantum cryptography. They are topic of studies for a long time and  are promising especially for signature schemes\cite{bernstein2009introduction}\cite{wiki:multi}.
 
 \paragraph*{Hash-based cryptography}
-Hash-based algorithms such as Lamport-\cite{wiki:lamportsig} and the Merkle\cite{wiki:merklesig} signature scheme is based on strong hash functions but has the downside that only a limited count signatures can be created per key. The algorithm reduces the one time signature to an hash value unsing a hash function\cite{bernstein2009introduction}.
+Hash-based algorithms such as Lamport-\cite{wiki:lamportsig} and the Merkle\cite{wiki:merklesig} signature scheme are based on strong hash functions but have the drawback that only a limited count signatures can be created per key. The algorithm reduces the one time signature to an hash value using a hash function\cite{bernstein2009introduction}.
 
 \paragraph*{Code-based cryptography}
-The forth group, the code based algorithms are based on error-correcting codes. First investigations have been made by Robert McEliece using random Goppa codes\cite{wiki:bingoppa}. This paper deals with the properies of McEliece- and the related Niederreiter cryptosystem\cite{bernstein2009introduction}\cite{wiki:niederreither}.
+The forth group, the code based algorithms, are based on error-correcting codes. First investigations have been developed by Robert McEliece using random Goppa codes\cite{wiki:bingoppa}. This paper deals with the properies of McEliece- and the related Niederreiter cryptosystem\cite{bernstein2009introduction}\cite{wiki:niederreither}.
+
+
+The raw overview of some state of the art algorithms shows different aproaches but in general it could be said that a much higher computational effort has to be taken to achieve a strong system compared to the traditional ones. 
 
 \section{The McEliece cryptosystem}
 \label{mceliece}
-Back in 1978 Robert McEliece suggested an asymmetric quantum resistant cryptosystem based on the theory of algebraic codes. He selected binary Goppa codes with the property irreducibility as base for the cryptosystem\cite{mceliece1978public}. The chosen code $C$ has a length of $n = 2^m$ and a dimension of $k >= n - tm$. These codes are able to correct any pattern of $t$ or fewer errors. 
-For each of this codes there exists an irreducible polynom of degree $t$ over $GF(2^m)$. 
-The main reason for McEliece to select these setup is that there exists an fast algorithm to decode these codes\cite{mceliece2002theory}.
+Back in 1978, Robert McEliece suggested an asymmetric quantum resistant cryptosystem based on the theory of algebraic codes. He selected binary Goppa codes with the property irreducibility as base a for the cryptosystem\cite{mceliece1978public}. The chosen code $C$ has a length of $n = 2^m$ and a dimension of $k >= n - tm$. These codes are able to correct any pattern of $t$ or fewer errors. 
+For each of this codes, there exists an irreducible polynom of degree $t$ over $GF(2^m)$. 
+The main reason for McEliece to select this setup is that there exists an fast algorithm to decode these codes\cite{mceliece2002theory}.
 
 \subsection*{Key generation}
-For generating a key $n$ and $t$ with above mentioned properties is picked. Additionally an irreducible polynomial of degree $t$ over $GF(2^m)$  is selected randomly. The probability that this selection leads to an irreducible polynomial is $1/t$ and there is a efficient algorithm to proof this\cite{berlekamp1968algebraic}.
-As next step an generator matrix $G$ which is of size $n \times k$ is produced. This can be transformed in canonical form. 
+For the key-generation $n$ and $t$ with above mentioned properties is picked. Additionally, an irreducible polynomial of degree $t$ over $GF(2^m)$  is selected randomly. The probability that this selection leads to an irreducible polynomial is $1/t$ and there is an efficient algorithm to prove this\cite{berlekamp1968algebraic}.
+In the next step a generator matrix $G$ which is of size $n \times k$ is produced. This can be transformed into canonical form. 
 
-Now the information of $G$ has to be camouflaged. There for a random dense $k \times k$ matrix $S$ which is nonsingular and a random $n \times n$ permutation matrix $P$ is selected. Both of them are multiplied to $G' = SGP$. Due to the matrix multiplication properties the linear code generated by $G'$ has the same rate and distance like $G$. $G'$ is the public generator matrix and is sent to the encrypting entity. 
+Now the information of $G$ has to be camouflaged. Therefore a random dense $k \times k$ matrix $S$ which is nonsingular and a random $n \times n$ permutation matrix $P$ is selected. Both of them are multiplied to $G' = SGP$. Due to the matrix multiplication properties, the linear code generated by $G'$ has the same rate and distance like $G$. $G'$ is the public generator matrix and is sent to the encrypting entity. 
 \newline
 \newline
 The following encryption algorithm is published so that the encrypting entity can use it. 
 
 \subsection*{Encryption}
-First of all the message $m$ to be encrypted has to be devided into $k$-bit blocks. The public key encryption is performed by $x = uG' + z$ with $u$ beeing one of such a $k$-bit block. In this case $z$ is a randomly generated vector with length $n$ and weight $t$ \footnote{The weight of an vector is defined as Hamming weight.}.
+First of all, the message $m$ which is to be encrypted has to be devided into $k$-bit blocks. The public key encryption is performed by $x = uG' + z$ with $u$ beeing one of such a $k$-bit block. In this case, $z$ is a randomly generated vector with length $n$ and weight $t$ \footnote{The weight of an vector is defined as Hamming weight.}.
 \newline
 \newline
 $x$ is the encrypted message which is transmitted to the private key owner who can decrypt the message block $u$ as follows. 
@@ -108,9 +111,9 @@ $x$ is the encrypted message which is transmitted to the private key owner who c
 The decryption of one block $x$ starts with computing $x' = xP^{-1}$ with $P^{-1}$ as inverse of the permutation matrix $P$. 
 
 %$x'$ is now a codeword in the Goppacode $C$ which was choosen during key generation. 
-With an error correcting algorithm for the code $C$ the codeword $u'$ next to $x'$ is calculated. 
+With an error correcting algorithm for the code $C$, the codeword $u'$ next to $x'$, is calculated. 
 To get a plaintext message block the computation $u = u'S^{-1}$ is performed\cite{wiki:mcelice}\cite{mceliece1978public}.
-As an efficient method for calculating the error corrections $x''S$ McEliece suggests the algorithm of Patterson\cite{patterson1975algebraic}. 
+As an efficient method for calculating the error corrections of $x'$ to $u'$, McEliece suggests the algorithm of Patterson\cite{patterson1975algebraic}. 
 % To decrypt the message we need the error correction properties of the codes. At first  $c' = cP^{-1}$ is computed. Now we computed the next codeword c'' from c' and therefrom the next message c'''. With $m = c''' * S^{-1}$ we derive the message from the ciphertext. 
 
 
@@ -126,8 +129,36 @@ On the other hand it refers to the hypothesis that the generator matrix $G$ is i
 
 %Unter der Learning-Parity-with-Noise-Annahme und der Annahme, dass G^ ununterscheidbar von zufällig k × n Matrizen ist, besitzt das Verfahren die Einwegeigenschaft.
 
-\section{The Niederreither cryptosystem}
+\section{The Niederreither cryptosystem in comparison to McEliece}
 \label{niederreither}
+The Niederreiter cryptosystem is highly comparable to the McEliece cryptosystem due to the fact that it is following the same basic idea. 
+
+Niederreiter designed his $(n, k, 2t + 1)$ linear code $C$ over a Galois field too. In contrast to McEliece the code size does not have to be a power of 2 instead of an arbitary integer $GF(q)$. 
+%MCE
+
+Another difference to McEliece is the usage of a $(n - k) \times (n)$ parity check matrix $H$ instead of  the generator matrix $G$. %pc matrix
+The nonsigular $(n - k) \times (n - k)$ matrix $M$ is defined sightly different from McEliece ($k \times k$)\todo{why?}.% ani non singular
+%permutation matrix == MCE
+The permutation matrix $P$, an arbitrary $n \times n$ matrix, is exactly defined in the same way compared to McEliece.
+The private key is then defined as $M, H and P$ the public key consists of $H' = MHP$ and the hamming weight $t$ which is quite the same compared to McEliece.
+The messages in the system of Niederreiter have to be $n$ dimensional vectors over $GF(q)$ and they must have a hamming weight of $t$. This is an important fact issuing the signature creation in \autoref{signature}\todo{why?}.
+Encryption with Niederreiter is performed with $z = yH'^T$ which again is comparable with the encryption operation $x = uG' + z$ in McEliece. The error vector $z$ is not needed here because this is already represented in ... \todo{why is it not needed to add the error vector here?}. The ciphertext has only n - k bit dimension compared to n bit in McEliece. 
+The decryption is computed firstly with $(yP^T)H^T = z(M^T)^(-1)$ Then $H$ is eliminated by an error correction algorithm which leads to $(yP)^T$ which can easily computed to the plaintext $y$. \cite{sendrier2011niederreiter}\cite{li1994equivalence}\cite{niederreiter1986knapsack}
+
+%This is a knapsack-type cryptosystem which employs an(n, k , 2t + 1)linear code C over GF(q). Let E be an ( n - k) x nparity check matrix of C, M any ( n - k ) x (n - k) nonsingularmatrix, and P any n x n permutation matrix, all over GF(q).
+%Private Key: E , M , and P.
+%Public Key: H‘ = M H P and t .
+%Messages: n dimensional vectors J over GF(q) with weight t.
+%Encryption: z = #HIT. z, the ciphertext of dimension n - k.
+%Decryption: Since z = J ( M H P ) ~ z(MT)-’ , = (@“)BT.
+%Use a fast decoding algorithm for C to find g$ and thus g.Niederreiter [3] cryptanalyzed his system and mentioned twoexample systems, one using a binary concatenated (104,24, 31) codeand the other using a (30, 12, 19) ReedSolomon code over GF(31).The examples were later verified as insecure by Brickell and Odlyzko
+
+
+
+
+
+
+
 % The Niederreiter variant - equivalent on a security point of view [8] - uses a syndrome (see below) as ciphertext, and the message is an error pattern instead of a codeword (see Table 1).
 
 
@@ -136,13 +167,14 @@ with lower key space
 
 
 \section{Signing with Niederreiter}
+\label{signature}
 Besides en- and decryption signatures building and verification is an common requirement to an asymmetric cryptoscheme. In state of the art algorithms principal is quite simple: The message to be signed is \textit{de}crypted with a given public key. The verifier \textit{en}crypts the message with his private key an compares the result with the message. 
 
 In case of McEliece this isn't so easy because it is not possible to decrypt (= sign) an message before encrypting (= verify) it. More precise the process of signing produces a syndrom whose \todo{dessen} error pattern is bigger than the error correcting property $t$. In fact it is hard to create a ciphertext that fits to the error correcting properties of the encryption without using it. 
 
 
 Compared to ecnryption and decryption siging and verifying is much harder to realise with McEliece. Just in 2006 a digital signature scheme were presented by Courtois et. al. 
-The problem with signing a given hash value n is that generally it is longer than the decoding capacity t of the used code. More general one can say that it is difficult to generate a random ciphertext without using the encyption algorithm. 
+The problem with signing a given hash value n is that generally it is longer than the decoding capacity t of the used code. More general one can say that it is difficult to generate a random ciphertext without using the encyption algorithm. \cite{courtois2001achieve}
 
 
 \subsubsection*{Complete decoding}
@@ -150,7 +182,7 @@ One possible solution would be to use complete decoding. Therefore not only the 
 
 From this properties we now can construct a digital signature scheme: We have to select a $\delta$ which is small enough to get an usable key size but on the other hand has a good security. 
 
-For achieving a small $\delta$ the code has to be selected carefully in the way that it has to have a high density of decodable syndromes. This makes sure that the $\delta$ is kept small because the probability of finding a fitting one is high. For building up a signature the signer now takes a syndrome and hashes it together with the document. This is tried with an modified document (possibly with some kind of padding) as long as he gets a decodable syndrome. 
+For achieving a small $\delta$ the code has to be selected carefully in the way that it has to have a high density of decodable syndromes. This makes sure that the $\delta$ is kept small because the probability of finding a fitting one is high. For building up a signature the signer now takes a syndrome and hashes it together with the document. This is tried with an modified document (possibly with some kind of padding) as long as he gets a decodable syndrome. \cite{courtois2001achieve}
 
 \todo{find parameter for this.}
 
@@ -198,9 +230,6 @@ This means if an attacker has access to an oracle which is able to decrypt an gi
 \todo{CCA1 / CCA2 }
 
 Like the RSA cryptosystem uses padding standards such as PSS for signing and OAEP for encrypting to achieve IND-CCA2 the MECS has some padding schemes as well.
-
-\subsubsection{Wild McElliece}
- to reduce key space
 
 \section{Conclusion}
 ...

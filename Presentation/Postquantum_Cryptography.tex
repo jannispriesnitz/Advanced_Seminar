@@ -1,0 +1,201 @@
+\section{Post quantum cryptography}
+	\subsection{Post quantum computing}	
+	
+		\begin{frame}
+			\frametitle{Quantum computing}
+				 What is quantum computing?
+				\begin{itemize}
+					\item Computer based on principle of quantum mechanics
+					\item Quantum computer contains qbits instead of bit
+					\begin{itemize}
+						\item Every qbit can be in state $0$ or $1$ but can also be in every \textit{sperposition} in between
+						\item The state is destroyed by reading it (see Schrödingers cat)
+					\end{itemize}
+					\item They are able to solve computational strong problems efficient
+				\end{itemize}
+		\end{frame}
+		
+		\begin{frame}
+			\frametitle{Quantum computing}
+				How real is it?
+				\begin{itemize}
+					\item 2001: IBM Almaden Research Center realized a system with 7 Qubits 
+					\begin{itemize}
+						\item Factored 15 into it's prime factors 3 und 5
+					\end{itemize}
+					\item ...
+					\item 2013: D-Wave Systems sells first quantum computes to Google and NASA
+				\end{itemize}
+				\vspace{10pt}
+				\begin{block}{}
+					\begin{center}
+						\textit{
+							We can say that quantum computing is a huge game changer on the filed of computation. \\
+							We can't say how real they are.}
+					\end{center}
+				\end{block}
+		\end{frame}
+		
+		\begin{frame}
+			\frametitle{Cryptography pre- and post quantum}
+			What is changing with focus on cryptography?
+			\begin{itemize}
+				\item Asymmetric state of the art security is no longer secure
+				\begin{itemize}
+					\item RSA $\rightarrow$ prime factorization
+					\item ECC $\rightarrow$ discrete logarithm problem 
+				\end{itemize}
+				\item Symmetric algorithms are still secure
+			\end{itemize}
+			
+			\begin{block}{}
+				\begin{center}
+					\textit{
+					We need other asymmetric cryptographic schemes than the established ones.}
+				\end{center}
+			\end{block}
+		\end{frame}
+	
+		\begin{frame}
+			\frametitle{Post quantum cryptography}
+			\begin{itemize}
+				\item Created by Daniel J. Bernstein
+				\item Algorithm loosing \textit{almost} no security executed on a quantum computer
+				\item Completely different mathematical base than established ones
+			\end{itemize}
+		\end{frame}
+		
+	\subsection{Shors algorithm}
+			\begin{frame}
+				\frametitle{Shors algorithm}
+				\begin{itemize}
+					\item Developed 1994 by Peter Shor
+					\item Solves prime factorization and discrete logarithm problem efficiently
+					\item Monte Carlo Algorithm
+					\item Classical part
+					\begin{itemize}
+						\item Mainly calculating gcd
+					\end{itemize}
+					\item Quantum part
+					\begin{itemize}
+						\item Mainly quantum Fouriertransformation
+					\end{itemize}
+				\end{itemize}
+			\end{frame}
+			
+			\begin{frame}[fragile]
+				\frametitle{Classical part}
+					For n as composed number: 
+										\footnotesize{
+						\begin{lstlisting}
+start:
+ select an integer $1 < x < n$
+ if gdc(x,n) is 1 // Euclidian algorithm
+  return 1
+ else
+  r = compute_order(x) // quantum part
+  if r is odd or x^(r/2) is equivalent -1(mod n)
+   goto start 
+  else
+   return gcd(x^(r/2) - 1, n)
+						\end{lstlisting}
+					}
+\end{frame}
+
+
+			\begin{frame}[fragile]
+				\frametitle{Quantum part (sketch)}
+					For n as input from the classical part: 
+					\footnotesize{
+					\begin{lstlisting}
+ start:
+ Determine q as power of 2 with n^2 <= q <= 2n^2
+ Init the input register with superposition of a mod q
+ Init the output  register with x^a(mod n)
+ Perform quantum Fouriertransformation on input register
+ r = meassurement of output register
+ if r != order(x)
+  goto start
+ else
+  return r
+					\end{lstlisting} }
+Note: The input quantum reg has all possible states of a mod.
+\end{frame}
+						
+			\begin{frame}
+				\frametitle{Complexity considerations}
+				\begin{itemize}
+					\item $O((log n)^3)$ Instructions
+					\item Complexity class of BQP
+					\item 
+					
+				\end{itemize}
+			\end{frame}
+			
+	\subsection{Canditates for post quantum cryptography}
+	
+			\begin{frame}
+				\frametitle{Lattice-based cryptography}
+				\begin{itemize}
+					\item Came um in 1996
+					\item Lattice over a n-dimensional finite Euclidian field
+					\begin{itemize}
+						\item Strong peridicity required
+					\end{itemize}
+					\item Set of vectors setting up the base
+					\item Unique representation
+					\item Cryptographic problem: Finding closest vector to an lattice point
+					%Algorithm works on a lattice over a n-dimensional finite Euclidian field L with an strong periodicity property. A set of vectors sets up the basis of L in the way that every element is uniquely represented. The cryptographic problem is to find the closest vector to an given lattice point e.g. by adding an error vector
+					\item 
+				\end{itemize}
+			\end{frame}
+
+			\begin{frame}
+				\frametitle{Multivariate cryptography}
+				\begin{itemize}
+					\item First mentione 1988
+					\item Multivariate polynomials over a finite field F
+					\item Defined over both a ground and an extension field
+					\item Promising for digital signatures
+					\item Private key consist of two affine transformations having an group endomorphism
+					\item Public key is the concatination of them
+				\end{itemize}
+				
+				% Multivariate cryptography is based on a multivariate polynomials over a finite field F which are defined over both a ground and an extension field. In case of Solving systems they are NP-complete and due to this fact a candidate for post quantum cryptography. They are topic of studies for a long time too and promising especially for signature schemes[1][3].
+				
+			\end{frame}
+			
+			\begin{frame}
+				\frametitle{Hash-based cryptography}
+				\begin{itemize}
+					\item Created by Lamport and Merkle in ~1979
+					\item Only usable for digital signatures
+					
+					\item Hash-based cryptographic algorithms
+					\begin{itemize}
+						\item PQ resistance required
+					\end{itemize}
+
+					\item Limited count of signatures for one key
+
+					
+				\end{itemize}
+				%Hash-based cryptography Hash-based algorithms such	as Lamport-[4] and the Merkle[5] ignature scheme is based on strong hash functions but has the downside that only a limited count signatures can be created per key. The algorithm reduces the one time signature to an hash value unsing a hash	function[1].
+				
+			\end{frame}
+			
+			\begin{frame}
+				\frametitle{Code-based cryptography}
+				\begin{itemize}
+					\item Founded by Robert McEliece in 1978
+					\item Based on error correcting codes
+					\begin{itemize}
+						\item Goppa Codes
+						\item Irreducibility
+					\end{itemize}
+					\item Good for encryption
+					\item Difficult for signing
+				\end{itemize}
+			\end{frame}
+	
+	

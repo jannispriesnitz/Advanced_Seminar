@@ -1,0 +1,136 @@
+\section{McEliece Cryptosystem}
+
+	\subsection{Basics}
+		\begin{frame}
+			\frametitle{McEliece Cryptosystem}
+			\begin{itemize}
+				\item Binary, irreducibility Goppa codes $C$
+				\begin{itemize}
+					\item Length: $n = 2^m$
+					\item Dimension of $k >= n - tm$
+					\item Correct up to $t$ errors	
+				\end{itemize}
+				\item Irreducible polynomial 
+				\begin{itemize}
+					\item Degree: $t$ over $GF(2^m)$. 
+					\item Dimension of $k >= n - tm$
+				\end{itemize}				
+			\end{itemize}
+		\end{frame}
+
+	\subsection{Key generation}
+		\begin{frame}
+			\frametitle{Establishing a key pair}
+			\begin{itemize}
+				\item Select $n$ and $t$ which defines the code
+				\item Select an polynomial of degree $t$ over $GF(2^m)$
+				\item Test $t$ if it is irreducible
+				\begin{itemize}
+					\item repeat if it is reducible
+				\end{itemize}
+				\item Produce a $n \times k$ generator matrix $G$
+				\item To improve the efficiency $G$ can be transformed into canonical form
+			\end{itemize}
+		\end{frame}
+	
+	
+		\begin{frame}
+			\frametitle{Establishing a key pair 2}
+			\begin{itemize}
+				\item Camouflage $G$
+				\begin{itemize}
+					\item Select $S$
+					\begin{itemize}
+						\item Random dense $k \times k$ matrix 
+						\item Nonsingular ``scrambling''
+					\end{itemize}
+					\item Select Permutationmatrix $P$
+					\begin{itemize}
+						\item Random $n \times n$ matrix 
+					%	\item 
+					\end{itemize}		
+					\item Compute $G' = SGP$
+					\begin{itemize}
+						\item Same rate and distance like $G$
+					\end{itemize}	
+
+	
+				\end{itemize}
+			\end{itemize}
+		\end{frame}
+	
+	\subsection{Encryption}
+		\begin{frame}
+			\frametitle{Encrypting a message}
+			\begin{itemize}
+				\item Divide message into k-bit blocks $u$
+				\item  $x = uG' + z$
+				\begin{itemize}
+					\item $z$ is a random vector with length $n$ and weight $t$
+				\end{itemize}
+				\item $x$ will be transmitted encrypted to the key owner
+			\end{itemize}
+			
+		\end{frame}
+	
+	\subsection{Decryption}
+		\begin{frame}
+			\frametitle{Decrypting a message}
+			With $x$ as received cipher text message block:
+			\begin{itemize}
+				\item Eliminate P: $x' = xP^{-1}$ 
+				\begin{itemize}
+					\item $P^{-1}$ inverse of permutation matrix
+				\end{itemize}
+				\item Perform correcting algorithm for $C$ 
+				\begin{itemize}
+					\item Codeword $u'$ next to $x'$ is calculated
+					\item Suggested error correction: Algorithm of Patterson
+				\end{itemize}
+				\item Get the plaintext $u = u'S^{-1}$
+				\begin{itemize}
+					\item Eliminate 
+				\end{itemize}
+				
+			\end{itemize}
+	
+		\end{frame}
+	
+	\subsection{Signature creation}
+		\begin{frame}
+			\frametitle{Issues with creating a signature}
+			\begin{itemize}
+				\item 
+			\end{itemize}
+		\end{frame}
+		
+		\begin{frame}
+			\frametitle{Solutions}
+			\begin{itemize}
+				\item test
+			\end{itemize}
+		\end{frame}
+		
+\subsection{Key space}
+		\begin{frame}
+			\frametitle{Lenght of cryptographically strong keys}
+			\begin{itemize}
+				\item test
+			\end{itemize}
+		\end{frame}
+
+\subsection{Correctness}
+	\begin{frame}
+		\frametitle{Correctness of the presented scheme}
+		\begin{itemize}
+			\item test
+		\end{itemize}
+	\end{frame}
+	
+\subsection{Security properties}
+	\begin{frame}
+		\frametitle{Security properties}
+		\begin{itemize}
+			\item test
+		\end{itemize}
+	\end{frame}
