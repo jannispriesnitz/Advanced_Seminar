@@ -113,7 +113,7 @@ The decryption of one block $x$ starts with computing $x' = xP^{-1}$ with $P^{-1
 %$x'$ is now a codeword in the Goppacode $C$ which was choosen during key generation. 
 With an error correcting algorithm for the code $C$, the codeword $u'$ next to $x'$, is calculated. 
 To get a plaintext message block the computation $u = u'S^{-1}$ is performed\cite{wiki:mcelice}\cite{mceliece1978public}.
-As an efficient method for calculating the error corrections of $x'$ to $u'$, McEliece suggests the algorithm of Patterson\cite{patterson1975algebraic}. 
+As an efficient method for calculating the error corrections of $x'$ to $u'$, McEliece suggests the algorithm of Patterson\cite{patterson1975algebraic}. Refer also to \autoref{decoding_properrties}. 
 % To decrypt the message we need the error correction properties of the codes. At first  $c' = cP^{-1}$ is computed. Now we computed the next codeword c'' from c' and therefrom the next message c'''. With $m = c''' * S^{-1}$ we derive the message from the ciphertext. 
 
 
@@ -142,7 +142,7 @@ The nonsigular $(n - k) \times (n - k)$ matrix $M$ is defined sightly different 
 The permutation matrix $P$, an arbitrary $n \times n$ matrix, is exactly defined in the same way compared to McEliece.
 The private key is then defined as $M, H and P$ the public key consists of $H' = MHP$ and the hamming weight $t$ which is quite the same compared to McEliece.
 The messages in the system of Niederreiter have to be $n$ dimensional vectors over $GF(q)$ and they must have a hamming weight of $t$. This is an important fact issuing the signature creation in \autoref{signature}\todo{why?}.
-Encryption with Niederreiter is performed with $z = yH'^T$ which again is comparable with the encryption operation $x = uG' + z$ in McEliece. The error vector $z$ is not needed here because this is already represented in ... \todo{why is it not needed to add the error vector here?}. The ciphertext has only n - k bit dimension compared to n bit in McEliece. 
+Encryption with Niederreiter is performed with $z = yH'^T$ which again is comparable with the encryption operation $x = uG' + z$ in McEliece. The error vector $z$ is not needed here because this is already represented in ... \todo[inline]{why is it not needed to add the error vector here?}. The ciphertext has only n - k bit dimension compared to n bit in McEliece. 
 The decryption is computed firstly with $(yP^T)H^T = z(M^T)^(-1)$ Then $H$ is eliminated by an error correction algorithm which leads to $(yP)^T$ which can easily computed to the plaintext $y$. \cite{sendrier2011niederreiter}\cite{li1994equivalence}\cite{niederreiter1986knapsack}
 
 %This is a knapsack-type cryptosystem which employs an(n, k , 2t + 1)linear code C over GF(q). Let E be an ( n - k) x nparity check matrix of C, M any ( n - k ) x (n - k) nonsingularmatrix, and P any n x n permutation matrix, all over GF(q).
@@ -154,16 +154,7 @@ The decryption is computed firstly with $(yP^T)H^T = z(M^T)^(-1)$ Then $H$ is el
 %Use a fast decoding algorithm for C to find g$ and thus g.Niederreiter [3] cryptanalyzed his system and mentioned twoexample systems, one using a binary concatenated (104,24, 31) codeand the other using a (30, 12, 19) ReedSolomon code over GF(31).The examples were later verified as insecure by Brickell and Odlyzko
 
 
-
-
-
-
-
 % The Niederreiter variant - equivalent on a security point of view [8] - uses a syndrome (see below) as ciphertext, and the message is an error pattern instead of a codeword (see Table 1).
-
-
-with lower key space
-
 
 
 \section{Signing with Niederreiter}
@@ -186,54 +177,72 @@ For achieving a small $\delta$ the code has to be selected carefully in the way 
 
 \todo{find parameter for this.}
 
-XXXXXXXXXXXXXXXXXXXXXXXXXXx
-
-With adaption of parameter a working signature scheme can be reached but with the downside of extremly hugh signature sizes of nearly 8kb. \todo{ref text}
-Signing
-
-\section{Variants of the McEliece cryptosystem}
-Due to the fact that the McEliece cryptosystem was published over 30 years ago and still is one of the most promissing post quantum security algorithms many variants came up. In this section two of the most important variants are presented. 
-
 \section{Codes can be used for MCElice and Niederreiter} \todo{both the same?}
-As described in the last sections the MCElice cryptosystem is based on the properties error correcting codes. In principle many codes with a good decoding algorithm could be used for the cryptosystem. However there are some properties which leads to higher security than others. In this section a short introduction to the basics of error cocrrecting codes is presented followed by a deeper view on Goppa codes which are suggested by McEliece and are still the best choice.
+As described in the last sections the McEliece cryptosystem is based on the properties error correcting codes. In principle many codes with a good decoding algorithm could be used for the cryptosystem. However there are some properties which leads to higher security than others. In this section a short introduction to the basics of error correcting codes is presented followed by a deeper view on Goppa codes which are suggested by McEliece and are still the best choice.
 
 \todo{what makes a code usable}
 \subsection{Principles of error correcting codes}
-As the name states the basic prupose of errror correcting code is to detect and correct errors which occur during the transition of messages. Therefore additional information is added to the message by the sender. Knowing the encodeing algorithm receiver is able to decode the original word, detect errors and correct them with help of the additional information and the corresponding decode algorithm. 
+As the name states the basic purpose of error correcting code is to detect and correct errors which occur during the transition of messages. Therefore additional information is added to the message by the sender. Knowing the encoding algorithm receiver is able to decode the original word, detect errors and correct them with help of the additional information and the corresponding decode algorithm. 
 
-Due to the fact that almost all transition is performed by computers and is in binary the explanations in following are focussed on the binary case too. Never the less all of them hold in the general case. 
+\subsubsection*{Binary} Due to the fact that almost all transition is performed by computers and is in binary the explanations in following are focussed on the binary case too. Never the less all of them hold in the general case. 
+
+
 
 %creating a code
 For generating these additional information a vector with binary indexes $V = {[c1 c2...cn] |ci \in {0, 1}}$ is created as set of $\mathbbm{F}_2$. Further the addition is defined componend-wise modulo 2, which also can be seen as XOR operation. With this definition $V$ covers all $n$-tuples in $\mathbbm{F}_2$. 
-Having this a binary, linear $[n, k]$ code can be defined as subspace of $\mathbbm{F}_2$ in which the $n$ is the length and the $k$ is the dimension. A codeword is represented as vector in the code.
+Having this, a binary, linear $[n, k]$ code can be defined as subspace of $\mathbbm{F}_2$ in which the $n$ is the length and the $k$ is the dimension. A codeword is represented as vector in the code.
  
 %Let V = {[c1 c2 · · · cn] |ci ∈ {0, 1}}, where addition in V is component-wiseaddition (mod 2). So V is the set of all n-tuples of elements of F2 . Then we define an [n, k] binary∼ nlinear code as a k-dimensional subspace of V = F2 . The parameters n and k are called the lengthand dimension, respectively, of the [n, k] binary linear code. Throughout the remainder of thispaper we will use the word code to mean a binary linear code. A codeword is any vector in the code.
 
-Another important variable for error correcting codes is the hamming weight or more precise the minimum weight $d$ of a vector. The weight is simply defined as count of non-zero positions in the vector. Furthermore the minimum weight is defined as minimum is the smallest weight of a codeword under the condition that it is not zero. 
+\subsubsection*{Hamming distance} Another important variable for error correcting codes is the hamming weight or more precise the minimum weight $d$ of a vector. The weight is simply defined as count of non-zero positions in the vector. Furthermore the minimum weight is defined as minimum is the smallest weight of a codeword under the condition that it is not zero. 
+A $[n, k, d]$ code can correct $t =  \lfloor \cfrac{d - 1}{2}\rfloor$ errors. 
 
 \subsection*{Goppa Codes}
-As stated before the linear code must have good decoding properties which is given in Goppa Codes with the algorithm of Patterson\todo{cite}. To keep the keyspace as efficient as possible the factor between the matrix dimensions n and k and the error correction range t should be as high as possible. The most important point is that Goppa Codes are a suspect of research for years so the probability of is really low. 
+\label{goppa}
+Goppa codes follow the principals described previously. In this section highlights the special basics (of Goppa codes) regarding the McEliece cryptosystem. Firstly some important basic properties and terminologies are presented. In the second part an example is discussed\todo{DO SO}. 
 
-Binary
-Irreduceable
-seperatable
-syndrom
-\subsection*{Reed Solomon Codes}
-\todo{Brooken - why --> Paper}
+\subsubsection*{Linearity}
+Goppa Codes are linear codes. This is not a conincidence because non-linear codes do not provide an efficient decoding algorithm like Pattersons algorithm for linear codes does\cite{patterson1975algebraic}. In \cite{zeng2014nonlinear} some remarkable results to achieve more efficiency are stated but also it is mentioned, that nonlinear codes are not able to achieve more comparable efficiency. 
+However most of the popular codes are linear ones this condition does not rule out so many codes.
 
-\subsubsection{Reducing Keyspace}
-To reduce the space of the given keys it is possible perform a Gausian elimination on $\hat{G}$ so that we gain $\tilde{G} = (E_{k}|\hat{G}')$. $E_{k}$ is the identity matrix which is not needed to be stored. With this process the keyspace reduces from $kn / 8 * 1024$ to $k(n-k) / 8 * 1024$.
-For decryption it is now needed to multiply the decrypted message with the matrix N which comes out of the gausian elimination process. 
+\subsubsection*{Irreducibility} 
+\todo[inline]{das könnte auch in ECC, da alle eccs durch polynomer erzeugt werden können und die irreduzibel sein müssen oder?}
+To achieve a finite field with usable properties for a Goppa code the generator polynomial has to bew irreducible. This means that for a polynomial $p$ over a finite field $GF(p^m)$ there exists no polynomial $p' \in GF(p^m)$ of lower degree which divides $p$.
+ 
+
+\subsubsection*{Efficency(?)} To keep the keyspace as efficient as possible the factor between the matrix dimensions $n$, $k$ and the error correction range $t$ (respectively the minimum hamming distance $d$) should be as high as possible. The most important point is that Goppa Codes are a suspect of research for years so the probability of is really low. 
+
+
+
+%Basic properties: 
+%Binary OK
+%Irreduceable OK
+%seperatable
+%syndrom
+%good decoding properties
+
+\section{Example of generating a Goppa Code and the McEliece cryptosytem}
+In \ref{mceliece} the threoretical the aspects of the McEliece cryptsystem were described and in \ref{goppa} the basics of generating a code were highlighted. In this section an example of of both is presented. 
+Projecting these parameters onto the MCeliece cryptosystem ... \todo{continue}
+
+
+\todo[inline]{ab hier eher ausblick}
+\section{Variants of the McEliece cryptosystem}
+Due to the fact that the McEliece cryptosystem was published over 30 years ago and still is one of the most promissing post quantum security algorithms many variants came up. In this section two of the most important variants are presented. 
+
 \subsection{Optimizing MECS}
+\todo[inline]{Wild MCE}
 In the previous sections we saw the importance of the McEliece crypto system and got an idea how the algorithm works. This sections focuses on the issues and their optimizations. 
-\subsubsection{Resistency against various attacker models}
-\todo{ausweiten aber niedrige prio}
+
+\section{Resistency against various attacker models}
+
+\todo{ausweite\todo[inline]{CPA / CCA1 / CCA2 }n aber niedrige prio}
 \paragraph{Achieving chosen cipher text resistance}
 
 Like the RSA cryptosystem in the original idea is not resistant against chosen cipher attacks. 
 
 This means if an attacker has access to an oracle which is able to decrypt an given ciphertext without knowing the key and the attacker is permitted to give all ciphertexts except the one he is asked to crack to the oracle he is not able to gather any reasonable information from the oracle. This goes over several iterations and is called CCA2-attack. In literature resistance against this attack is described as IND-CCA2. 
-\todo{CCA1 / CCA2 }
+
 
 Like the RSA cryptosystem uses padding standards such as PSS for signing and OAEP for encrypting to achieve IND-CCA2 the MECS has some padding schemes as well.
 
