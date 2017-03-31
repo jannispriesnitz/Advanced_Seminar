@@ -40,8 +40,6 @@ In order to reach post quantum proof cryptographic algorithms, some fundamentall
 \label{shoor}
 Peter Shor presented in 1994 an algorithm which is able to factorize a composite number n into its prime factors. This algorithm is especially designed for quantum computers on which it only needs $log n$ qubits and has a runtime of $O((log n)^3)$ for finding a non trivial factor of n. 
 
-
-
 \subsubsection{Procedure}
 \todo{review section --> more abstract}
 Shors algorithm divides into a classical part which can be executed on a conventional computer and a quantum part which has to be executed on a quantum computer in order tp perform the computation efficiently. 
@@ -181,12 +179,10 @@ For achieving a small $\delta$ the code has to be selected carefully in the way 
 As described in the last sections the McEliece cryptosystem is based on the properties error correcting codes. In principle many codes with a good decoding algorithm could be used for the cryptosystem. However there are some properties which leads to higher security than others. In this section a short introduction to the basics of error correcting codes is presented followed by a deeper view on Goppa codes which are suggested by McEliece and are still the best choice.
 
 \todo{what makes a code usable}
-\subsection{Principles of error correcting codes}
+\subsection*{Principles of error correcting codes}
 As the name states the basic purpose of error correcting code is to detect and correct errors which occur during the transition of messages. Therefore additional information is added to the message by the sender. Knowing the encoding algorithm receiver is able to decode the original word, detect errors and correct them with help of the additional information and the corresponding decode algorithm. 
-
+\todo{start earlier: principles of error correction}
 \subsubsection*{Binary} Due to the fact that almost all transition is performed by computers and is in binary the explanations in following are focussed on the binary case too. Never the less all of them hold in the general case. 
-
-
 
 %creating a code
 For generating these additional information a vector with binary indexes $V = {[c1 c2...cn] |ci \in {0, 1}}$ is created as set of $\mathbbm{F}_2$. Further the addition is defined componend-wise modulo 2, which also can be seen as XOR operation. With this definition $V$ covers all $n$-tuples in $\mathbbm{F}_2$. 
@@ -206,6 +202,7 @@ Goppa Codes are linear codes. This is not a conincidence because non-linear code
 However most of the popular codes are linear ones this condition does not rule out so many codes.
 
 \subsubsection*{Irreducibility} 
+y
 \todo[inline]{das könnte auch in ECC, da alle eccs durch polynomer erzeugt werden können und die irreduzibel sein müssen oder?}
 To achieve a finite field with usable properties for a Goppa code the generator polynomial has to bew irreducible. This means that for a polynomial $p$ over a finite field $GF(p^m)$ there exists no polynomial $p' \in GF(p^m)$ of lower degree which divides $p$.
  
@@ -225,18 +222,26 @@ To achieve a finite field with usable properties for a Goppa code the generator 
 In \ref{mceliece} the threoretical the aspects of the McEliece cryptsystem were described and in \ref{goppa} the basics of generating a code were highlighted. In this section an example of of both is presented. 
 Projecting these parameters onto the MCeliece cryptosystem ... \todo{continue}
 
+% Endweder
+% Usability & Keylengths
+% -> Keylengths
+% Ausblick
+% oder 
+% Ausblick / Further topics
+% -> Usability
+% -> Keylengths
+% -> ...
 
-\todo[inline]{ab hier eher ausblick}
-\section{Variants of the McEliece cryptosystem}
-Due to the fact that the McEliece cryptosystem was published over 30 years ago and still is one of the most promissing post quantum security algorithms many variants came up. In this section two of the most important variants are presented. 
+\todo[inline]{ab hier eher ausblick --> further topics}
+\section{Further topics}
+To get an elaborated overview over all facets of the McEliece cryptosystem many more topics have to be issued which are not covered in detail in the article. In this sections some of the most important topics are described slightly. 
 
-\subsection{Optimizing MECS}
-\todo[inline]{Wild MCE}
-In the previous sections we saw the importance of the McEliece crypto system and got an idea how the algorithm works. This sections focuses on the issues and their optimizations. 
-
-\section{Resistency against various attacker models}
-
-\todo{ausweite\todo[inline]{CPA / CCA1 / CCA2 }n aber niedrige prio}
+\todo[inline]{EXPERIMENTEL: 
+	Erst attacker models, dann real world security attacks dann keylangth --> alle unter ein überschrift.}
+\todo[inline]{CPA / CCA1 / CCA2 }
+\todo{ausweiten aber niedrige prio}
+\subsection{Resistency against various attacker models}
+foo
 \paragraph{Achieving chosen cipher text resistance}
 
 Like the RSA cryptosystem in the original idea is not resistant against chosen cipher attacks. 
@@ -245,6 +250,57 @@ This means if an attacker has access to an oracle which is able to decrypt an gi
 
 
 Like the RSA cryptosystem uses padding standards such as PSS for signing and OAEP for encrypting to achieve IND-CCA2 the MECS has some padding schemes as well.
+
+
+\subsection{Practical security attacks}
+\label{keylength}
+Every cryptosystem with certain parameters has to hold against attacks to be considered as safe. These attacks can be very different for every cipher suite. An easy approach to break a system is the brute force attack in which every possible private key is tried out to decrypt the message. 
+For the McEliece cryptosystem there are much better attack such as structural and information set decoding attacks. 
+Structural attack ...
+
+Information set decoding is the most promising method of breaking McEliece so far. The idea behind this is to find a set of error free coordinates in a codeword. If the corresponding columns in the generator matrix form a invertible submatrix the information from original message word can be obtained easily. 
+
+ If there is a (n,k,t) code of a generator $G$ and a ciphertext $c = uG + e \in  \mathbbm{F}^n_2$. An attacker now randomly selects a subset (the information set) $I \subset 1, ..., n$ of size k beeing linearly independent. Now an ``masking'' function $\delta$ is needed which projects $c$ on $I$ such as $\delta(c)_{i \in I} = (uG)_{i\in I}+e_{i\in I}$
+ 
+ If this projection leads to a error free result (also $weight(e) = 0$) we can obain the message word from the code by $\delta(r)* \delta(G)^{-1} = \delta(uG)^{-1}*\delta(G)^{-1} = u$
+ Note that this is not the commen case an typically needs many iterations.
+ 
+  %an generates \hat{G}_I from it and the public key. He now hopes that the generated matrix is invertible so that he can obtain the information from original message word.  contains no errors 
+
+
+\subsection{Recommended parameters}
+In \cite{niebuhr2012selecting} Niebuhr et al computed some key length based on the Model of Lenstra and Verheul. They motivated that keylength have to grow with speedup of computer hardware and concluded state of the art keylenths of traditional algorithms which is ported to the McEliece Cryptosystem by Niebuhr et al. Based on the best known attack of Sendrier at al, which is able to break the original parameters ($n = 1024$, $k = 524$, $t = 50$) with a minimal binary work factor of $2^59,9$ operations \cite{finiasz2009security}, they presented the following values as secure parameters until the year 2050: $n = 2804$, $k = 2048$ and $t = 66$. A public key generated has a size of about 189 kilobyte. This is almost 400 times more keyspace than a RSA key and almost 3000 times more than an eliptic curves key which promises safety until 2050 too, but only on conventional computers. The key size issue is decribed a liitle more into detail in \ref{space_efficiency}.
+
+
+\section{Open Challanges}
+From the practical point of view the presented schemes more sketches of one way trapdoor functions than fully filled crypto schemes. These trapdoors can be used in many different ways to generate a ``standard'' crypto scheme maybe as replacement for RSA- and ECC-cryptography, but this has to be done carefully. In this section a short summary of the challenges are such as usability properties, computation time and key sizes is presented \todo{followed by some variants of the scheme. ???} These three topics are highly connected to each other. 
+
+\subsection*{Confidence}
+\label{confidence}
+One of the most delicate tasks when putting an abstract algorithm into a real crypto application is to achieve confidence into\todo{from?} it. Many pitfalls like wrong codes or parameters and weak padding algorithms have to discovered by cryptoanalysts to increase the confidence level. However both, the RSA and the McElice where suggested over 35 years ago, the development on RSA was pushed forward much faster because of the adavantage of a lower keyspace. This development has to be done in the next years for McEliece to get over issues discoverd in the past and achieve an optimized reliable system. 
+
+\subsection*{Efficiency}
+In most cases the abstract term ``efficiency'' is divided in time- and space efficiency. Daniel J. Bernstein made \cite{bernstein2009introduction} a short comparison with the RSA which should be summed up here shortly. 
+
+\paragraph*{Time effciency} is seen as time needed to perform the key generation, encryption and decryption. More precisely the different ``operations'' executed and their complexity are reviewed. 
+
+Compared to RSA the McEliece is quite time efficient. As described in \autoref{mceliece} the main computations are matrix operations in the binary field, which can be broken down to highly efficient additions, multiplications, shifts etc. for which no special hardware requirements are needed\cite{bernstein2009introduction}.
+\todo{ggf gegensatz zu rsa beschreiben}
+
+\paragraph*{Space efficiency} \label{space_efficiency} refers to the storage needed to be provided in order to execute the algorithm. In our case the bytes needed to transmit the public key to the encryption entity or signer additionally is an important topic. 
+
+Is most important drawback is the key sizes to be transferred. With $n$ denoted as code length respectively key length McEliece needs about $b^2*(lg b)^2$ bits whereas the RSA only needs $(~0,16)*b^3/(lg b)^2$ bits. One might notice the higher exponent in RSA formular which leads to an faster growing key space if the security level goes to $\infty$ but the break even point \todo{heißt das so??} is fare beyond practical relevant key sizes. For keys assumed as secure in these days the McEliece key is size is about 10 times higher than RSA\footnote{Assuming unoptimized but optimal algorithms without attention of quantum computers.}. Refer also to \autoref{keylength} for a deeper view on keylenght with different parameters.
+
+\paragraph*{Usability}
+The last important point is to provide an usable interface for the cryptosystem. New crypto protocols can only be successful if many applications in different domains are supporting them. Therefore padding scheme like addressed in \autoref{confidence} has to be provided and standardised to make sure that different software systems on different platforms can speak to each other. 
+
+\subsection*{Optimizing McEliece} %oder optimizing MCE
+Due to the fact that the McEliece cryptosystem was published over 30 years ago and still is one of the most promising post quantum security algorithms many variants came up. Many of the previous described issues could be solved by reducing the key space. In conclusion this means optimising on the used codes. Many codes like Reed-Solomon codes, quasi dyadic codes, and variants of Goppa codes have been tried, seen as secure and been broken a little later. 
+
+\subsubsection*{Wild McEliece}
+The most promising optimization is idea of using ``wild'' Goppa codes\cite{bernstein2010wild}. Wild Goppa codes are codes which are no longer over a field $F_2$ but on $F_q$ with $q$ as small prime number. These approach was broken by generating the squeare code of the public key and revealing information of the original private key, because the square product lines are not equally distributed compared to the binary code. In \cite{yang2011post} the approach wild McEliece idea is improved with an ``incognito'' variant. As the name says the wild Goppa codes are hidden by multiplying a extra factor $f$ to the code and by using only special codes described in \cite{berger2005mask}. This topic and the question if squaring technique is still considerable for the incognito version, is still a topic of research. 
+
+
 
 \section{Conclusion}
 ...
