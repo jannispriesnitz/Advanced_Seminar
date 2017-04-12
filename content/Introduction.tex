@@ -33,73 +33,72 @@ In \autoref{post_quantum}, some background information regarding post quantum cr
 
 \section{Post quantum cryptography}
 \label{post_quantum}
-\todo[inline]{What makes cryptosystems strong?}
-In order to reach post quantum proof cryptographic algorithms, some fundamentally different then the established ones are required. Shors Algorithm in \ref{shoor} reveals that cryptography based on integer factorization or the discrete logarithm problem is no longer an issue for quantum computers. Therefore other algorithm types are needed which are shortly described in \ref{pqalgcand}.   
+In order to reach post quantum proof cryptographic algorithms, some fundamentally different approaches then the established ones are required. Shors Algorithm in \ref{shoor} reveals that cryptography based on integer factorization or the discrete logarithm problem is no longer an issue for quantum computers. Therefore other algorithm types are needed which are shortly described in \ref{pqalgcand}.   
 
 \subsection{Shors Algorithm}
 \label{shoor}
-Peter Shor presented in 1994 an algorithm which is able to factorize a composite number n into its prime factors. This algorithm is especially designed for quantum computers on which it only needs $log n$ qubits and has a runtime of $O((log n)^3)$ for finding a non trivial factor of n. 
+Peter Shor presented in 1994 an algorithm which is able to factorize a composite number $n$ into its prime factors on a quantum computer. This algorithm only needs $log\: n$ qubits and has a runtime of $O((log\: n)^3)$ for finding a non trivial factor of $n$. 
 
-\subsubsection{Procedure}
-\todo{review section --> more abstract}
+\subsubsection*{Procedure}
 Shors algorithm divides into a classical part which can be executed on a conventional computer and a quantum part which has to be executed on a quantum computer in order tp perform the computation efficiently. 
 
 The basic idea is that the classical part reduces the problem while the quantum part finds the order of the group in which n is. 
+In this section Shors algorithm is shortly sketched to get an intend of the method of quantum computing and the principles an quantum proof algorithm has to follow. 
 \paragraph{Classical part}
-The classical part of the algorithm mainly contains computation of the greatest common devisor of a randomly selected number lower than $n$ and $n$ itself. Now we need to compute the order $r$ of $x$ which is where the quantum part emerges. The classical part is executed in a loop while the order $r$ is odd or $x$ to the power of $r/2$ is equivalent to $-1 mod n$  \todo{why?} \todo{make formula beautiful}
-If this is not the case the gcd of $x^(r / 2) -1$ n is computed.
+The classical part of the algorithm mainly contains computation of the greatest common devisor of a randomly selected number lower than $n$ and $n$ itself. Then it is needed to compute the order $r$ of $x$ which is where the quantum part emerges. The classical part is executed in a loop while the order $r$ is odd or $x$ to the power of $r/2$ is equivalent to $-1\: mod\:n$  \todo{why?}
+If this is not the case the gcd of $x^{(r / 2)} -1$ n is computed.
 \paragraph{Quantum part}
-At first there a $q$ is determined which is a power of $2$ and lies between $n2$ and $2 n2$. 
-A random $a$ which is lower than n is selected and the input quantum register is initialized with all states of $a mod q$. \todo{formel}
-The output quantum register is initialized with all states of xa(mod n). 
+At first a $q$ is determined which is a power of $2$ and lies between $n^2$ and $2*n^2$. 
+To prepare the input quantum register the superposition of all states $a\: mod\: q$ is loaded. In this case $a$ is smaller than $n$.
+%A $a$ which represents all states is lower than $n$ is selected and the input quantum register is initialized with all states of $a\: mod\: q$.
+The output quantum register is initialized with all states of $x^a(mod n)$. 
+A quantum Fourier transformation is computed on the input register which is treated as black box in this work. 
+The result values are gathered from the output register. 
 
-A quantum Fourier transformation is computed on the input register. 
-
-The result values are gathered from the input register. 
-
-\todo{vllt. doch abstrakter}
 To sum up Shors algorithm with support of a quantum computer is able to find the period of a prime in polynomial time. 
 
-With this algorithm all cryptography based on prime factorization can be broken by a quantum computer in polynomial time. 
+With this algorithm all cryptography based on prime factorization can be broken by a quantum computer in polynomial time. Note that not the quantum fourier transformation, which takes only $O(1)$ operations, is the bottleneck but \todo{instead of?} the fast exponentiation which takes $O(log\: n)$ with the currently best implementation\cite{markov2012constant}. Together with the pre- and  postprocessing the time complexity is at $O(log(n)^3)$.
 
-\subsubsection{Complexity of Shors Algorithm} \todo[inline]{on normal pc and on quantum pc}
-Considering the complexity of Shors algorithm on quantum computers, it's easy to see that there is a complexity of $O(log n)$ which is in the class of BQP. This class is comparable to the class BPP on conventional computers. In this regard the an state of the art RSA key of 2048 bit length can be broken in xxxx\todo{kann solch eine Aussage treffen?}. In the case of elliptic curves cryptosystem it's even worse. Due to the principal of the algorithm ECC is gathering more security per bit keylength on a conventional computer and only has keys up to 512 bit. This is not the case on quantum computer which makes them even easier to break compared to RSA keys.
-\todo[inline]{BQP / BPP mit reinnehmen??? Könnte interessant sein. Unter oder neben Shor?}
+%\subsubsection*{Complexity of Shors Algorithm}
+%Considering the complexity of Shors algorithm on quantum computers, it's easy to see that there is a complexity of $O(log n)$ which is in the class of BQP. This class is comparable to the class BPP on conventional computers. In this regard the an state of the art RSA key of 2048 bit length can be broken in xxxx\todo{kann solch eine Aussage treffen?}. In the case of elliptic curves cryptosystem it's even worse. Due to the principal of the algorithm ECC is gathering more security per bit keylength on a conventional computer and only has keys up to 512 bit. This is not the case on quantum computer which makes them even easier to break compared to RSA keys.
+%\todo[inline]{BQP / BPP mit reinnehmen??? Könnte interessant sein. Unter oder neben Shor?}
 
-\subsection{Candidates for post quantum cryptography}
+\subsection*{Candidates for post quantum cryptography}
 \label{pqalgcand}
 In this section a short overview over promising state of the art post quantum cryptoschemes based on \cite{bernstein2009introduction} is given. 
 \paragraph*{Lattice-based cryptography}
-One of the most studied types of algorithm is the lattice based cryptography which exists in several variants. Algorithm works on a lattice over a n-dimensional finite Euclidian field $L$ with a strong periodicity property. A set of vectors provides the basis of $L$ in the way that every element is uniquely represented. The cryptographic problem is to find the closest vector to a given lattice point e.g. by adding an error vector\cite{bernstein2009introduction}\cite{wiki:lattice}.
+One of the most studied types of algorithm is the lattice based cryptography which exists in several variants. Algorithm works on a lattice over a $n$-dimensional finite Euclidian field $L$ with a strong periodicity property. A set of vectors provides the basis of $L$ in the way that every element is uniquely represented. The cryptographic problem is to find the closest vector to a given lattice point e.g. by adding an error vector\cite{bernstein2009introduction}\cite{wiki:lattice}.
 \paragraph*{Multivariate cryptography}
-Multivariate cryptography is based on a multivariate polynomials over a finite field $F$ which are defined over both a ground and an extension field. In the case of solving systems they are NP-complete and due to this fact a candidate for post quantum cryptography. They are topic of studies for a long time and  are promising especially for signature schemes\cite{bernstein2009introduction}\cite{wiki:multi}.
+Multivariate cryptography is based on a multivariate polynomials over a finite field $F$ which are defined over both a ground and an extension field. In the case of solving these multivariate polynomial equation systems they are NP-complete and due to this fact a candidate for post quantum cryptography. They are topic of studies for a long time and  are promising especially for signature schemes\cite{bernstein2009introduction}\cite{wiki:multi}.
 
 \paragraph*{Hash-based cryptography}
-Hash-based algorithms such as Lamport-\cite{wiki:lamportsig} and the Merkle\cite{wiki:merklesig} signature scheme are based on strong hash functions but have the drawback that only a limited count signatures can be created per key. The algorithm reduces the one time signature to an hash value using a hash function\cite{bernstein2009introduction}.
+Hash-based algorithms such as Lamport- \cite{wiki:lamportsig} and the Merkle \cite{wiki:merklesig} signature scheme are based on strong hash functions but have the drawback that only a limited count signatures can be created per key. The algorithm reduces the one time signature to an hash value using a hash function\cite{bernstein2009introduction}.
 
 \paragraph*{Code-based cryptography}
 The forth group, the code based algorithms, are based on error-correcting codes. First investigations have been developed by Robert McEliece using random Goppa codes\cite{wiki:bingoppa}. This paper deals with the properies of McEliece- and the related Niederreiter cryptosystem\cite{bernstein2009introduction}\cite{wiki:niederreither}.
-
-
-The raw overview of some state of the art algorithms shows different aproaches but in general it could be said that a much higher computational effort has to be taken to achieve a strong system compared to the traditional ones. 
+\newline
+\newline
+This raw overview of some state of the art algorithms show different approaches but in general it could be said that a much higher effort has to be taken to achieve a strong system compared to the traditional ones. 
 
 \section{The McEliece cryptosystem}
 \label{mceliece}
-Back in 1978, Robert McEliece suggested an asymmetric quantum resistant cryptosystem based on the theory of algebraic codes. He selected binary Goppa codes with the property irreducibility as base a for the cryptosystem\cite{mceliece1978public}. The chosen code $C$ has a length of $n = 2^m$ and a dimension of $k >= n - tm$. These codes are able to correct any pattern of $t$ or fewer errors. 
+In 1978, Robert McEliece suggested an asymmetric quantum resistant cryptosystem based on the theory of algebraic codes. He selected binary Goppa codes with the property irreducibility as base a for the cryptosystem \cite{mceliece1978public}. The chosen code $C$ has a length of $n = 2^m$ and a dimension of $k >= n - tm$. These codes are able to correct any pattern of $t$ or fewer errors. 
 For each of this codes, there exists an irreducible polynom of degree $t$ over $GF(2^m)$. 
-The main reason for McEliece to select this setup is that there exists an fast algorithm to decode these codes\cite{mceliece2002theory}.
+The main reason for McEliece to select this setup is that there exists an fast algorithm to decode these codes \cite{mceliece2002theory}.
+\newline
+A illustrating example can be found in \ref{example}.
 
 \subsection*{Key generation}
-For the key-generation, a $n$ and $t$ with above mentioned properties are picked. Additionally, an irreducible polynomial of degree $t$ over $GF(2^m)$  is selected randomly. The probability that this selection leads to an irreducible polynomial is $1/t$ and there is an efficient algorithm to prove this\cite{berlekamp1968algebraic}.
+For the key-generation, a $n$ and $t$ with above mentioned properties are picked. Additionally, an irreducible polynomial of degree $t$ over $GF(2^m)$  is selected randomly. The probability that this selection leads to an irreducible polynomial is $1/t$ and there is an efficient algorithm to prove the irreducibility\cite{berlekamp1968algebraic}.
 In the next step a generator matrix $G$ which is of size $n \times k$ is produced. This can be transformed into canonical form. 
 
-Now the information of $G$ has to be camouflaged. Therefore a random dense $k \times k$ matrix $S$ which is nonsingular and a random $n \times n$ permutation matrix $P$ is selected. Both of them are multiplied to $G' = SGP$. Due to the matrix multiplication properties, the linear code generated by $G'$ has the same rate and distance like $G$. $G'$ is the public generator matrix and is sent to the encrypting entity. 
+Now the information of $G$ has to be obscured. Therefore a random dense $k \times k$ matrix $S$ which is nonsingular and a random $n \times n$ permutation matrix $P$ is selected. Both of them are multiplied to $G' = SGP$. Due to the matrix multiplication properties, the linear code generated by $G'$ has the same rate and distance like $G$. $G'$ is the public generator matrix and is sent to the encrypting entity. 
 \newline
 \newline
 The following encryption algorithm is published so that the encrypting entity can use it. 
 
 \subsection*{Encryption}
-First of all, the message $m$ which is to be encrypted has to be devided into $k$-bit blocks. The public key encryption is performed by $x = uG' + z$ with $u$ beeing one of such a $k$-bit block. In this case, $z$ is a randomly generated vector with length $n$ and weight $t$ \footnote{The weight of an vector is defined as Hamming weight.}.
+First of all, the message $m$ which is to be encrypted has to be devided into $k$-bit blocks. The public key encryption is performed by $x = uG' + z$ with $u$ being one of such a $k$-bit block. In this case, $z$ is a randomly generated vector with length $n$ and weight $t$ \footnote{The weight of an vector is defined as Hamming weight.}.
 \newline
 \newline
 $x$ is the encrypted message which is transmitted to the private key owner who can decrypt the message block $u$ as follows. 
@@ -162,7 +161,7 @@ Besides en- and decryption signatures building and verification is an common req
 In case of McEliece this isn't so easy because it is not possible to decrypt (= sign) an message before encrypting (= verify) it. More precise the process of signing produces a syndrom whose \todo{dessen} error pattern is bigger than the error correcting property $t$. In fact it is hard to create a ciphertext that fits to the error correcting properties of the encryption without using it. 
 
 
-Compared to ecnryption and decryption siging and verifying is much harder to realise with McEliece. Just in 2006 a digital signature scheme were presented by Courtois et. al. 
+Compared to ecnryption and decryption signing and verifying is much harder to realise with McEliece. Just in 2006 a digital signature scheme were presented by Courtois et. al. 
 The problem with signing a given hash value n is that generally it is longer than the decoding capacity t of the used code. More general one can say that it is difficult to generate a random ciphertext without using the encyption algorithm. \cite{courtois2001achieve}
 
 
@@ -219,8 +218,91 @@ To achieve a finite field with usable properties for a Goppa code the generator 
 %good decoding properties
 
 \section{Example of generating a Goppa Code and the McEliece cryptosytem}
-In \ref{mceliece} the threoretical the aspects of the McEliece cryptsystem were described and in \ref{goppa} the basics of generating a code were highlighted. In this section an example of of both is presented. 
-Projecting these parameters onto the MCeliece cryptosystem ... \todo{continue}
+\label{example}
+In \ref{mceliece} the threoretical the aspects of the McEliece cryptsystem were described. 
+\newline
+Consider Alice and Bob as two entities who want to communicate encrypted. 
+Therefore Bob chooses the following matrix $G$ as generator: 
+\begin{center}
+$
+G =
+\begin{Bmatrix}
+1 & 0 & 0 & 0 & 1 & 1 & 0 \\
+0 & 1 & 0 & 0 & 1 & 0 & 1 \\
+0 & 0 & 1 & 0 & 1 & 1 & 1 \\
+0 & 0 & 0 & 1 & 0 & 1 & 1 \\
+\end{Bmatrix}
+$
+\end{center}
+Additionally a matrix  $S$ to obscure the generator is chosen by Bob:
+\begin{center}
+	$
+	S =
+	\begin{Bmatrix}
+	1 & 0 & 0 & 1 \\
+	1 & 1 & 0 & 1 \\
+	0 & 1 & 1 & 1 \\
+	1 & 1 & 0 & 0 \\
+	\end{Bmatrix}
+	$
+\end{center}
+
+A permutation matrix $P$ is also needed: 
+\begin{center}
+	$
+	P =
+	\begin{Bmatrix}
+	0 & 0 & 0 & 1 & 0 & 0 & 0 \\
+	0 & 1 & 0 & 1 & 0 & 0 & 0 \\
+	0 & 0 & 0 & 0 & 0 & 0 & 1 \\
+	0 & 0 & 0 & 0 & 1 & 0 & 0 \\
+	0 & 0 & 1 & 0 & 0 & 0 & 0 \\
+	0 & 0 & 0 & 0 & 0 & 1 & 0 \\
+	1 & 0 & 0 & 0 & 0 & 0 & 0 \\
+	
+	\end{Bmatrix}
+	$
+\end{center}
+Now Bob calculates the public key $G'$: 
+\begin{center}
+	$
+	G' = SGP =
+	\begin{Bmatrix}
+	1 & 0 & 1 & 1 & 1 & 0 & 0 \\
+	0 & 1 & 0 & 1 & 1 & 0 & 0 \\
+	1 & 1 & 0 & 0 & 1 & 0 & 1 \\
+	1 & 1 & 0 & 1 & 0 & 1 & 0 \\
+	
+	\end{Bmatrix}
+	$
+\end{center}
+Aliece chooses a random vector $e$:
+\begin{center}
+	$
+	e =
+	\begin{Bmatrix}
+	0 & 0 & 0 & 0 & 0 & 1 & 0 \\
+	\end{Bmatrix}
+	$
+\end{center}
+This matrix is sent to Alice who calculates $y = x*G'+e$:
+\begin{center}
+	$
+	y = x*G'+e =
+	\begin{Bmatrix}
+	0 & 0 & 1 & 1 & 0 & 0 & 0 \\
+	\end{Bmatrix}
+	$
+\end{center}
+This codeword is sent to Bob who decodes the word with $P^{-1}$ which leads to:
+\begin{center}
+	$
+	y = x*G'+e =
+	\begin{Bmatrix}
+	1 & 0 & 0 & 0 & 1 & 0 & 0 \\
+	\end{Bmatrix}
+	$
+\end{center}
 
 % Endweder
 % Usability & Keylengths
@@ -236,50 +318,59 @@ Projecting these parameters onto the MCeliece cryptosystem ... \todo{continue}
 \section{Further topics}
 To get an elaborated overview over all facets of the McEliece cryptosystem many more topics have to be issued which are not covered in detail in the article. In this sections some of the most important topics are described slightly. 
 
-\todo[inline]{EXPERIMENTEL: 
-	Erst attacker models, dann real world security attacks dann keylangth --> alle unter ein überschrift.}
-\todo[inline]{CPA / CCA1 / CCA2 }
-\todo{ausweiten aber niedrige prio}
-\subsection{Resistency against various attacker models}
-foo
-\paragraph{Achieving chosen cipher text resistance}
 
+\todo{ausweiten aber niedrige prio}
+\subsection*{Resistency against various attacker models}
+For a cryptoanalyst attacker models are the first choice to design attacks an given scheme. Two of the most common attacker model and resistance approaches are slightly presented in this section.
+
+%http://crypto.stackexchange.com/questions/33383/how-is-mceliece-chosen-plaintext-secure
+\paragraph*{Chosen plain text resistance}
+Chosen plaintext restance means that an attacker own two different plaintexts $p_1$ and $p_2$ and gets two belonging ciphertexts $c_1$ and $c_2$ he has no chance to gather information from the ciphertext which tells him that it belongs to plaintext $p_1$ or $p_2$.
+%The original idea of McEliece is not safe against this kind of attack because the attacker is able to use the error correctiong properties to 
+The attaacke is able to use the two known plantexts and a randomly chosen message to compute a sample $c$. This is now subtracted during the decryption because
+Now the attacker can easily compute the message because one of $e_1$ or $e_2$ is the right error vector. He can determine the right message by seeing that it has less than 2t-1 non zero terms in it.
+
+
+\paragraph*{Chosen cipher text resistance}
 Like the RSA cryptosystem in the original idea is not resistant against chosen cipher attacks. 
 
-This means if an attacker has access to an oracle which is able to decrypt an given ciphertext without knowing the key and the attacker is permitted to give all ciphertexts except the one he is asked to crack to the oracle he is not able to gather any reasonable information from the oracle. This goes over several iterations and is called CCA2-attack. In literature resistance against this attack is described as IND-CCA2. 
+This means if an attacker has access to an oracle which is able to decrypt an given ciphertext without knowing the key and the attacker is permitted to give all ciphertexts except the one he is asked to crack to the oracle he is not able to gather any reasonable information from the oracle. This goes over several iterations and is called CCA2-attack in the literature. Resistance against this attack is described as IND-CCA2. 
 
+Like the RSA cryptosystem uses padding standards such as PSS for signing and OAEP for encrypting to achieve IND-CCA2 the MECS has some advanced padding and randomization schemes as well. The common approach on this is to add  random vectors and perform shift operations on the ciphertext during the encryption\cite{dottling2012cca2}. 
 
-Like the RSA cryptosystem uses padding standards such as PSS for signing and OAEP for encrypting to achieve IND-CCA2 the MECS has some padding schemes as well.
-
-
-\subsection{Practical security attacks}
+\subsection*{Practical security attacks}
 \label{keylength}
-Every cryptosystem with certain parameters has to hold against attacks to be considered as safe. These attacks can be very different for every cipher suite. An easy approach to break a system is the brute force attack in which every possible private key is tried out to decrypt the message. 
-For the McEliece cryptosystem there are much better attack such as structural and information set decoding attacks. 
-Structural attack ...
+Every cryptosystem with certain parameters has to hold against attacks to be considered as safe. These attacks can be very different for every cipher suite. 
+For the McEliece cryptosystem there are two types of promising attacks named structural and information set decoding attacks. 
+\paragraph*{Structural attacks} describes the approach of constructing a code for the information of code generated by the public key $G'$. If this succeeds the private key $G$ is revealed. 
+To fullfill such an attack an equivalent code $E$ to $G'$ has to be found, which means that a permutation $m$ exists which permutes $G'$ to $E'$. Then $E'$ generated by $G'$ and the $E$ generated by $G$ are from the same class. 
+Because of knowing this dependence an attacker can compare a representant from each of such classes to $E'$ to get an equivalent code. This still is a huge computational problem which is not solvable is sufficient time because the cardinality of such an equivalent matrix is small. \cite{au2003mceliece}
 
-Information set decoding is the most promising method of breaking McEliece so far. The idea behind this is to find a set of error free coordinates in a codeword. If the corresponding columns in the generator matrix form a invertible submatrix the information from original message word can be obtained easily. 
+%The easiest approach of an structural attack is the brute force attack in which every possible private key is tried out to decrypt the message. 
+
+\paragraph*{Information set decoding} is the most promising method of breaking McEliece so far. The idea behind this is to find a set of error free coordinates in a codeword. If the corresponding columns in the generator matrix form a invertible submatrix the information from original message word can be obtained easily. 
 
  If there is a (n,k,t) code of a generator $G$ and a ciphertext $c = uG + e \in  \mathbbm{F}^n_2$. An attacker now randomly selects a subset (the information set) $I \subset 1, ..., n$ of size k beeing linearly independent. Now an ``masking'' function $\delta$ is needed which projects $c$ on $I$ such as $\delta(c)_{i \in I} = (uG)_{i\in I}+e_{i\in I}$
  
- If this projection leads to a error free result (also $weight(e) = 0$) we can obain the message word from the code by $\delta(r)* \delta(G)^{-1} = \delta(uG)^{-1}*\delta(G)^{-1} = u$
- Note that this is not the commen case an typically needs many iterations.
+ If this projection leads to a error free result (also $weight(e) = 0$) we can obtain the message word from the code by $\delta(r)* \delta(G)^{-1} = \delta(uG)^{-1}*\delta(G)^{-1} = u$. 
+ But this is not the common case an typically needs many iterations.
  
+ Note that information set decoding is not an total break of the system because it does not reveal the private key but only the message word corresponding to th codeword. 
   %an generates \hat{G}_I from it and the public key. He now hopes that the generated matrix is invertible so that he can obtain the information from original message word.  contains no errors 
 
 
-\subsection{Recommended parameters}
+\subsection*{Recommended parameters}
 In \cite{niebuhr2012selecting} Niebuhr et al computed some key length based on the Model of Lenstra and Verheul. They motivated that keylength have to grow with speedup of computer hardware and concluded state of the art keylenths of traditional algorithms which is ported to the McEliece Cryptosystem by Niebuhr et al. Based on the best known attack of Sendrier at al, which is able to break the original parameters ($n = 1024$, $k = 524$, $t = 50$) with a minimal binary work factor of $2^59,9$ operations \cite{finiasz2009security}, they presented the following values as secure parameters until the year 2050: $n = 2804$, $k = 2048$ and $t = 66$. A public key generated has a size of about 189 kilobyte. This is almost 400 times more keyspace than a RSA key and almost 3000 times more than an eliptic curves key which promises safety until 2050 too, but only on conventional computers. The key size issue is decribed a liitle more into detail in \ref{space_efficiency}.
 
 
-\section{Open Challanges}
+\subsection*{Challenges and optimizations} %Open Challanges
 From the practical point of view the presented schemes more sketches of one way trapdoor functions than fully filled crypto schemes. These trapdoors can be used in many different ways to generate a ``standard'' crypto scheme maybe as replacement for RSA- and ECC-cryptography, but this has to be done carefully. In this section a short summary of the challenges are such as usability properties, computation time and key sizes is presented \todo{followed by some variants of the scheme. ???} These three topics are highly connected to each other. 
 
-\subsection*{Confidence}
+\subsubsection*{Confidence}
 \label{confidence}
 One of the most delicate tasks when putting an abstract algorithm into a real crypto application is to achieve confidence into\todo{from?} it. Many pitfalls like wrong codes or parameters and weak padding algorithms have to discovered by cryptoanalysts to increase the confidence level. However both, the RSA and the McElice where suggested over 35 years ago, the development on RSA was pushed forward much faster because of the adavantage of a lower keyspace. This development has to be done in the next years for McEliece to get over issues discoverd in the past and achieve an optimized reliable system. 
 
-\subsection*{Efficiency}
+\subsubsection*{Efficiency}
 In most cases the abstract term ``efficiency'' is divided in time- and space efficiency. Daniel J. Bernstein made \cite{bernstein2009introduction} a short comparison with the RSA which should be summed up here shortly. 
 
 \paragraph*{Time effciency} is seen as time needed to perform the key generation, encryption and decryption. More precisely the different ``operations'' executed and their complexity are reviewed. 
@@ -294,13 +385,19 @@ Is most important drawback is the key sizes to be transferred. With $n$ denoted 
 \paragraph*{Usability}
 The last important point is to provide an usable interface for the cryptosystem. New crypto protocols can only be successful if many applications in different domains are supporting them. Therefore padding scheme like addressed in \autoref{confidence} has to be provided and standardised to make sure that different software systems on different platforms can speak to each other. 
 
-\subsection*{Optimizing McEliece} %oder optimizing MCE
+\subsection*{Wild McEliece} %oder optimizing MCE
 Due to the fact that the McEliece cryptosystem was published over 30 years ago and still is one of the most promising post quantum security algorithms many variants came up. Many of the previous described issues could be solved by reducing the key space. In conclusion this means optimising on the used codes. Many codes like Reed-Solomon codes, quasi dyadic codes, and variants of Goppa codes have been tried, seen as secure and been broken a little later. 
 
-\subsubsection*{Wild McEliece}
+%\subsubsection*{}
 The most promising optimization is idea of using ``wild'' Goppa codes\cite{bernstein2010wild}. Wild Goppa codes are codes which are no longer over a field $F_2$ but on $F_q$ with $q$ as small prime number. These approach was broken by generating the squeare code of the public key and revealing information of the original private key, because the square product lines are not equally distributed compared to the binary code. In \cite{yang2011post} the approach wild McEliece idea is improved with an ``incognito'' variant. As the name says the wild Goppa codes are hidden by multiplying a extra factor $f$ to the code and by using only special codes described in \cite{berger2005mask}. This topic and the question if squaring technique is still considerable for the incognito version, is still a topic of research. 
 
 
 
 \section{Conclusion}
-...
+The topic of this work was to present an basic introduction on postquantum cryptography with focus on the McElice cryptosystem. With basic information of the underlying Goppa codes a deeper view on the algorithm was given supported by an example computation. Moreover special properties and downside were lighted. 
+
+In conclusion the McEliece cryptosystem stays one of the most promissing canditates for a post quantum cryptography and is still an huge topic of research as the literature references show. Never the less there are huge downsides, especially the large keysize and with a view on the practical usability. 
+%In this paper a broad overview on the topic of 
+% presented a broad overview 
+% based on recent papers
+%In this 
