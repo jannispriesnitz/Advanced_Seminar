@@ -182,6 +182,7 @@
 %
 \usepackage{amsmath}
 \usepackage{bbm}
+\usepackage{amssymb}
 % A popular package from the American Mathematical Society that provides
 % many useful and powerful commands for dealing with mathematics. If using
 % it, be sure to load this package with the cmex10 option to ensure that
@@ -365,7 +366,7 @@
 
 
 % todonotes
-\usepackage{todonotes}
+\usepackage[disable]{todonotes}
 
 %autoref
 \usepackage{hyperref}
@@ -426,7 +427,7 @@ Email: jannis.priesnitz@stud.h-da.de}
 
 \begin{abstract}
 %\boldmath
-This article gives an elaborated overview of the McEliece cryptosystem from todays perspective. Starting with some basics on post quantum computing the reason why such an cryptoscheme is necessary is enlighted. The cryptosystem itself is described into detail supported by an example. The Niederreiter cryptoschme as an famous variant is described. Finally state of the art issues and attempts to solve them are presented. 
+This article gives an elaborated overview of the McEliece cryptosystem from today's perspective. Starting with some basics on post quantum computing, the reason why such an cryptoscheme is necessary is discussed. The cryptosystem itself is described in detail, supported by an example. Moreover the Niederreiter cryptoscheme as a famous variant is described. For an understanding about the insights of both schemes, some details of underlying coding theory are discussed. Finally, state of the art issues and attempts to solve them are presented. 
 \end{abstract}
 % IEEEtran.cls defaults to using nonbold math in the Abstract 
 % This preserves the distinction between vectors and scalars. However,
@@ -437,7 +438,7 @@ This article gives an elaborated overview of the McEliece cryptosystem from toda
 
 % Note that keywords are not normally used for peerreview papers.
 \begin{IEEEkeywords}
-McEliece, Niederreiter, post quantum cryptography
+McEliece cryptosystem, Niederreiter cryptosystem, post quantum cryptography, coding theory
 \end{IEEEkeywords}
 
 % For peer review papers, you can put extra information on the cover
@@ -589,7 +590,7 @@ McEliece, Niederreiter, post quantum cryptography
 % <OR> manually copy in the resultant .bbl file
 % set second argument of \begin to the number of references
 % (used to reserve space for the reference number labels box)
-\nocite{*}
+%\nocite{*}
 %\nociteschund{*}
 %\renewcommand\refname{Quellen}
 \bibliography{Quellen} 
@@ -638,4 +639,5 @@ McEliece, Niederreiter, post quantum cryptography
 \end{document}
 
 
+\grid
 \grid

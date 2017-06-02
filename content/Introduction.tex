@@ -1,18 +1,30 @@
 \label{key}\section{Introduction}
-State of the art asymmetric cryptosystems compared with usage of sufficient long Keys are considered as "safe" on current computer systems. This changes immediately when quantum computers enter the scene. But why is this the case? In this paper I briefly present the main differences between normal computer systems and quantum computers and why state of the art cryptosystems like RSA and ECC are not save in the quantum computation world. In addition to that I, present a extensive introduction to the McEliece Cryptosystem explain the strengths and downsides of the algorithm and give some details about the developments of codes which can be used for the system.
+State of the art asymmetric cryptosystems in combination with usage of sufficient long keys are considered as "safe" on current computer systems. This changes immediately when quantum computers enter the scene. But why is this the case? 
+
+In this paper, I briefly present the main differences between normal computer systems and quantum computers and why state of the art cryptosystems like RSA and ECC are not safe in the quantum computation world. In addition to that, I present an extensive introduction to the McEliece Cryptosystem, explain the strengths and downsides of the algorithm and give some details on the development of codes which can be used for the system.
 
 \label{conv_comp_vs_quan_comp}
-Since decades computer systems have been seen as digital circuits based on the rules of physics. A bit in this systems is seen as a value of voltage. If this value is above a certain, level the binary representation is one, otherwise it's zero. 
+For decades, computer systems have been seen as digital circuits based on the rules of physics. A bit in these systems is seen as a value of voltage. If this value is above a certain level, the binary representation is one, otherwise it's zero. 
 On quantum computers, information is handled in binary, too. The main difference between the bit representation and the quantum bit representation (so called qubit) is that in addition to the two states zero and one, there are several more states which one qubit can reach due to a superposition. This means that a qubit is not either in state one or in state zero but in theory can have an arbitrary number of different states. All these states can appear with an certain probability. Each of these states is able to compute one possibility of a NP hard problem. 
 
-Due to this fact, quantum computers are able to solve problems which are NP hard in sense of complexity theory much faster than traditional computers. 
+Due to this fact, quantum computers are able to solve problems which are NP hard, in sense of complexity, theory much faster than traditional computers. 
 
-One of these computational problems, which are traditionally hard to solve, is the prime factorization problem which is in serveral variations the core of many public key algorithms such as the RSA cryptosystem. 
-The second main category, the elliptic curves cryptography is even more affected by this problem as the logarithm of a finite field of an elliptic curve can be computed efficiently and can be broken in less time compared to the RSA algorithm  because of lower keysizes. 
-In conclusion, there is no established asymmetric cryptoscheme which is post quantum resistant. Therefore completely different approaches are needed. 
+One of these computational problems, which are traditionally hard to solve, is the prime factorization problem which is in several variations the core of many public key algorithms such as the RSA cryptosystem. 
+The second main category, the elliptic curves cryptography, is even more affected by this problem, as the logarithm of a finite field of an elliptic curve can be computed efficiently and can be broken in less time compared to the RSA algorithm  because of lower keysizes. 
+In conclusion, there is no established asymmetric cryptoscheme which is post quantum resistant. Therefore, completely different approaches are needed. 
 
 \subsection*{Outline}
-In \autoref{post_quantum}, some background information regarding post quantum cryptography is given. With help of Shors algorithm the principle of quantum cryptography is described more precisely. Section \ref{mceliece} takes a detailed look into the McEliece cryptosystem supported by an example in \autoref{example}. The Niederreiter cryptosystem follows in \autoref{niederreither} with an additional view on signing with it in \autoref{signature}. The underlying Goppa codes are described in \autoref{goppa}. Finally in \autoref{further_topics} a slight overview on attacker models and current developments such as wild McElice are given.
+\todo{TBR}
+In \autoref{post_quantum}, some background information regarding post quantum cryptography is given. With help of Shor's algorithm the principle of quantum cryptography is described more precisely. Section \ref{mceliece} takes a detailed look into the McEliece cryptosystem supported by an example in \autoref{example}. The Niederreiter cryptosystem, as famous variant of the McEliece cryptosystem, follows in \autoref{niederreither} with an additional view on signing with it in \autoref{signature}. The underlying error correcting codes are described in \autoref{coding}, supported by some basics about coding theory in same section. In \autoref{further_topics}, a slight overview on attacker models and current developments such as wild McEliece are given. Finally a brief conclusion is presented in \autoref{conclu}.
+
+% POST QUANTUM CRYPTOGRAPHY
+% THE MC E LIECE CRYPTOSYSTEM
+% THE N IEDERREITER CRYPTOSYSTEM IN COMPARISON TO M CE LIECE
+% SIGNING WITH NIEDERREITER
+% ERROR CORRECTIONG CODES
+%  E XAMPLE OF THE M C ELIECE CRYPTOSYSTEM
+% Further topics
+
 
 %1. State of the art cryptography vs. Post quantum cryptography schreiben
 %2. Shor überarbeiten
@@ -33,31 +45,31 @@ In \autoref{post_quantum}, some background information regarding post quantum cr
 
 \section{Post quantum cryptography}
 \label{post_quantum}
-In order to reach post quantum proof cryptographic algorithms, some fundamentally different approaches then the established ones are required. Shors Algorithm in \ref{shoor} reveals that cryptography based on integer factorization or the discrete logarithm problem is no longer an issue for quantum computers. Therefore other algorithm types are needed which are shortly described in \ref{pqalgcand}.   
+In order to reach post quantum proof cryptographic algorithms, some fundamentally different approaches than the established ones are required. Shor's algorithm in \ref{shoor} reveals that cryptography based on integer factorization or the discrete logarithm problem is no longer an issue for quantum computers. Therefore, other algorithm types are needed which are briefly described in \autoref{pqalgcand}.   
 
-\subsection{Shors Algorithm}
+\subsection*{Shor's Algorithm}
 \label{shoor}
-Peter Shor presented in 1994 an algorithm which is able to factorize a composite number $n$ into its prime factors on a quantum computer. This algorithm only needs $log\: n$ qubits and has a runtime of $O((log\: n)^3)$ for finding a non trivial factor of $n$. 
+In 1994, Peter Shor presented an algorithm which is able to factorize a composite number $n$ into its prime factors on a quantum computer. This algorithm only needs $log\: n$ qubits and has a runtime of $O((log\: n)^3)$ for finding a non trivial factor of $n$. 
 
 \subsubsection*{Procedure}
-Shors algorithm divides into a classical part which can be executed on a conventional computer and a quantum part which has to be executed on a quantum computer in order tp perform the computation efficiently. 
+Shor's algorithm is divided into a classical part which can be executed on a conventional computer and a quantum part which has to be executed on a quantum computer in order to perform the computation efficiently. 
 
 The basic idea is that the classical part reduces the problem while the quantum part finds the order of the group in which n is. 
-In this section Shors algorithm is shortly sketched to get an intend of the method of quantum computing and the principles an quantum proof algorithm has to follow. 
+In this section Shor's algorithm is shortly outlined to get an idea of the method of quantum computing and the principles an quantum proof algorithm has to follow. 
 \paragraph{Classical part}
-The classical part of the algorithm mainly contains computation of the greatest common devisor of a randomly selected number lower than $n$ and $n$ itself. Then it is needed to compute the order $r$ of $x$ which is where the quantum part emerges. The classical part is executed in a loop while the order $r$ is odd or $x$ to the power of $r/2$ is equivalent to $-1\: mod\:n$  \todo{why?}
+The classical part of the algorithm mainly contains computation of the greatest common divisor of a randomly selected number lower than $n$ and $n$ itself. Then it is necessary to compute the order $r$ of $x$ which is where the quantum part emerges. The classical part is executed in a loop while the order $r$ is odd or $x$ to the power of $r/2$ is equivalent to $-1\: mod\:n$.  %\todo{why?}
 If this is not the case the gcd of $x^{(r / 2)} -1$ n is computed.
 \paragraph{Quantum part}
-At first a $q$ is determined which is a power of $2$ and lies between $n^2$ and $2*n^2$. 
-To prepare the input quantum register the superposition of all states $a\: mod\: q$ is loaded. In this case $a$ is smaller than $n$.
+At first, a $q$ is determined which is a power of $2$ and lies between $n^2$ and $2*n^2$. 
+To prepare the input quantum register, the superposition of all states $a\: mod\: q$ is loaded. In this case $a$ is smaller than $n$.
 %A $a$ which represents all states is lower than $n$ is selected and the input quantum register is initialized with all states of $a\: mod\: q$.
 The output quantum register is initialized with all states of $x^a(mod n)$. 
-A quantum Fourier transformation is computed on the input register which is treated as black box in this work. 
+A quantum Fourier transformation is computed on the input register which is treated as a black box in this work. 
 The result values are gathered from the output register. 
 
-To sum up Shors algorithm with support of a quantum computer is able to find the period of a prime in polynomial time. 
+To sum up, Shor's algorithm with support of a quantum computer is able to find the period of a prime in polynomial time. 
 
-With this algorithm all cryptography based on prime factorization can be broken by a quantum computer in polynomial time. Note that not the quantum fourier transformation, which takes only $O(1)$ operations, is the bottleneck but \todo{instead of?} the fast exponentiation which takes $O(log\: n)$ with the currently best implementation\cite{markov2012constant}. Together with the pre- and  postprocessing the time complexity is at $O(log(n)^3)$.
+With this algorithm, all cryptography based on prime factorization can be broken by a quantum computer in polynomial time. Note that not the quantum fourier transformation, which takes only $O(1)$ operations, is the bottleneck but \todo{instead of?} the fast exponentiation which takes $O(log\: n)$ with the currently best implementation\cite{markov2012constant}. Together with the pre- and  postprocessing, the time complexity is at $O(log(n)^3)$.
 
 %\subsubsection*{Complexity of Shors Algorithm}
 %Considering the complexity of Shors algorithm on quantum computers, it's easy to see that there is a complexity of $O(log n)$ which is in the class of BQP. This class is comparable to the class BPP on conventional computers. In this regard the an state of the art RSA key of 2048 bit length can be broken in xxxx\todo{kann solch eine Aussage treffen?}. In the case of elliptic curves cryptosystem it's even worse. Due to the principal of the algorithm ECC is gathering more security per bit keylength on a conventional computer and only has keys up to 512 bit. This is not the case on quantum computer which makes them even easier to break compared to RSA keys.
@@ -65,40 +77,40 @@ With this algorithm all cryptography based on prime factorization can be broken 
 
 \subsection*{Candidates for post quantum cryptography}
 \label{pqalgcand}
-In this section a short overview over promising state of the art post quantum cryptoschemes based on \cite{bernstein2009introduction} is given. 
+In this section, a short overview over promising state of the art post quantum cryptoschemes based on \cite{bernstein2009introduction} is given. 
 \paragraph*{Lattice-based cryptography}
-One of the most studied types of algorithm is the lattice based cryptography which exists in several variants. Algorithm works on a lattice over a $n$-dimensional finite Euclidian field $L$ with a strong periodicity property. A set of vectors provides the basis of $L$ in the way that every element is uniquely represented. The cryptographic problem is to find the closest vector to a given lattice point e.g. by adding an error vector\cite{bernstein2009introduction}\cite{wiki:lattice}.
+One of the most studied types of algorithms is the lattice based cryptography which exists in several variants. The Algorithm works on a lattice over a $n$-dimensional finite Euclidian field $L$ with a strong periodicity property. A set of vectors provides the basis of $L$ in the way that every element is uniquely represented. The cryptographic problem is to find the closest vector to a given lattice point e.g. by adding an error vector\cite{bernstein2009introduction}\cite{micciancio2009lattice}.
 \paragraph*{Multivariate cryptography}
-Multivariate cryptography is based on a multivariate polynomials over a finite field $F$ which are defined over both a ground and an extension field. In the case of solving these multivariate polynomial equation systems they are NP-complete and due to this fact a candidate for post quantum cryptography. They are topic of studies for a long time and  are promising especially for signature schemes\cite{bernstein2009introduction}\cite{wiki:multi}.
+Multivariate cryptography is based on a multivariate polynomials over a finite field $F$ which are defined over both a ground and an extension field. In the case of solving these multivariate polynomial equation systems, they are NP-complete and due to this fact a candidate for post quantum cryptography. They are topic of studies up to now and are promising especially for signature schemes\cite{bernstein2009introduction}\cite{wiki:multi}.
 
 \paragraph*{Hash-based cryptography}
-Hash-based algorithms such as Lamport- \cite{wiki:lamportsig} and the Merkle \cite{wiki:merklesig} signature scheme are based on strong hash functions but have the drawback that only a limited count signatures can be created per key. The algorithm reduces the one time signature to an hash value using a hash function\cite{bernstein2009introduction}.
+Hash-based algorithms such as the Lamport- \cite{lamport1979constructing} and the Merkle \cite{merkle1979secrecy} signature scheme are based on strong hash functions but have the disadvantage that only a limited number signatures can be created per key. The algorithm reduces the one time signature to an hash value using a hash function\cite{bernstein2009introduction}.
 
 \paragraph*{Code-based cryptography}
-The forth group, the code based algorithms, are based on error-correcting codes. First investigations have been developed by Robert McEliece using random Goppa codes\cite{wiki:bingoppa}. This paper deals with the properies of McEliece- and the related Niederreiter cryptosystem\cite{bernstein2009introduction}\cite{wiki:niederreither}.
+The forth group, the code based algorithms, are based on error-correcting codes. First investigations have been developed by Robert McEliece using random Goppa codes\cite{engelbert2007summary}. This paper deals with the properies of McEliece- and the related Niederreiter cryptosystem\cite{bernstein2009introduction}\cite{sendrier2011niederreiter}.
 \newline
 \newline
-This raw overview of some state of the art algorithms show different approaches but in general it could be said that a much higher effort has to be taken to achieve a strong system compared to the traditional ones. 
+This raw overview of some state of the art algorithms show different approaches but in general, it can be said that a much higher effort has to be taken to achieve a strong system compared to the traditional ones. 
 
 \section{The McEliece cryptosystem}
 \label{mceliece}
 \todo[inline]{Was macht die Matrix S und was macht die Matrix P. Warum invertierbare und warum Permutationsmatrix. Verstehen Sie den Sinn hinter diesen beiden Matrizen? 
 }
-In 1978, Robert McEliece suggested an asymmetric quantum resistant cryptosystem based on the theory of algebraic codes. He selected binary Goppa codes with the property of irreducibility as base a for the cryptosystem \cite{mceliece1978public}. The chosen code $C$ has a length of $n = 2^m$ and a dimension of $k >= n - tm$ where $t$ denotes the degree of the polynomial over $GF(2^m)$. In this case $m$ indicates the size of the binary field. These codes are able to correct any pattern of $t$ or fewer errors. 
-For each of this codes, there exists an irreducible polynomial of degree $t$. 
-The main reason for McEliece to select this setup is that there exists an fast algorithm to decode these codes \cite{mceliece2002theory}. A illustrating example can be found in \ref{example}.
+In 1978, Robert McEliece suggested an asymmetric quantum resistant cryptosystem based on the theory of algebraic codes. He selected binary Goppa codes with the property of irreducibility as a base for the cryptosystem \cite{mceliece1978public}. The chosen code $C$ has a length of $n = 2^m$ and a dimension of $k >= n - tm$ where $t$ denotes the degree of the polynomial over $GF(2^m)$. In this case, $m$ indicates the size of the binary field. These codes are able to correct any pattern of $t$ or fewer errors. 
+For each of these codes, an irreducible polynomial of degree $t$ exists. 
+The main reason for McEliece to select this setup is that an fast algorithm to decode these codes \cite{mceliece2002theory} then exists. An illustrating example can be found in \autoref{example}. More details about the underlying coding theory can be found in \autoref{coding}.
 
 \subsection*{Key generation}
-For the key-generation, a $n$ and $t$ with above mentioned properties are picked. Additionally, an irreducible polynomial of degree $t$ over $GF(2^m)$  is selected randomly. The probability that this selection leads to an irreducible polynomial is $1/t$ and there is an efficient algorithm to prove the irreducibility\cite{berlekamp1968algebraic}.
-In the next step a generator matrix $G$ which is of size $n \times k$ is produced. This can be transformed into canonical form. 
+For the key-generation, a $n$ and $t$ with the above mentioned properties are picked. Additionally, an irreducible polynomial of degree $t$ over $GF(2^m)$  is selected randomly. The probability that this selection leads to an irreducible polynomial is $1/t$ and there is an efficient algorithm to prove the irreducibility\cite{berlekamp1968algebraic}.
+In the next step, a generator matrix $G$ sized $n \times k$ is produced. This can be transformed into canonical form. 
 
-Now the information of $G$ has to be obscured. Therefore a random dense $k \times k$ matrix $S$ which is nonsingular and a random $n \times n$ permutation matrix $P$ is selected. Both of them are multiplied to $G' = SGP$. Due to the matrix multiplication properties, the linear code generated by $G'$ has the same rate and distance like $G$. $G'$ is the public generator matrix and is sent to the encrypting entity. 
+Now the information of $G$ has to be obscured. Therefore, a random dense $k \times k$ matrix $S$ which is nonsingular and a random $n \times n$ permutation matrix $P$ is selected. Both of them are multiplied to $G' = SGP$. Due to the matrix multiplication properties, the linear code generated by $G'$ has the same rate and distance like $G$. $G'$ is the public generator matrix and is sent to the encrypting entity. 
 \newline
 \newline
 The following encryption algorithm is published so that the encrypting entity can use it. 
 
 \subsection*{Encryption}
-First of all, the message $m$ which is to be encrypted has to be devided into $k$-bit blocks. The public key encryption is performed by $x = uG' + z$ with $u$ being one of such $k$-bit blocks. $z$ denotes a randomly generated vector with length $n$ and weight $t$ \footnote{The weight of an vector is defined as Hamming weight.}.
+First of all, the message $m$ which is to be encrypted has to be divided into $k$-bit blocks. The public key encryption is performed by $x = uG' + z$ with $u$ being one of such $k$-bit blocks. $z$ denotes a randomly generated vector with length $n$ and weight $t$ \footnote{The weight of an vector is defined as Hamming weight.}.
 \newline
 \newline
 The vector $x$ is the encrypted message which is transmitted to the private key owner who can decrypt the message block as follows. 
@@ -108,11 +120,20 @@ The vector $x$ is the encrypted message which is transmitted to the private key 
 The decryption of one block $x$ starts with computing $x' = xP^{-1}$ with $P^{-1}$ as inverse of the permutation matrix $P$. 
 
 %$x'$ is now a codeword in the Goppacode $C$ which was choosen during key generation. 
-With an error correcting algorithm for the code $C$, the codeword $u'$ "next" to $x'$, is computed. As already mentioned with Pattersons algorithm there is an efficient method for computing the error correction, which is described in \cite{patterson1975algebraic}.
-To get a plaintext message block the calculation $u = u'S^{-1}$ is performed\cite{mceliece1978public}.
+With an error correcting algorithm for the code $C$, the codeword $u'$ "next" to $x'$, is computed. As already mentioned, with Patterson's algorithm, there exists an efficient method for computing the error correction, which is described in \cite{patterson1975algebraic}.
+To get a plaintext message block, the calculation $u = u'S^{-1}$ is performed\cite{mceliece1978public}.
 %As an efficient method for calculating the error corrections of $x'$ to $u'$, McEliece suggests the algorithm of Patterson\cite{patterson1975algebraic}. %Refer also to \autoref{decoding_properrties}. 
 % To decrypt the message we need the error correction properties of the codes. At first  $c' = cP^{-1}$ is computed. Now we computed the next codeword c'' from c' and therefrom the next message c'''. With $m = c''' * S^{-1}$ we derive the message from the ciphertext. 
 
+\subsection*{A closer look at the key pair}
+As described in the key generation, the public key is a single matrix $G' = SGP$, wheras the private key consists of the  three matrices $S$, $G$ and $P$. 
+It is obvious that from $G' = G$ there is no security achievable. Some kind of ``hiding'' the original information of $G$ is required. This is achieved by the matrices $S$ and $P$. Of course, this hiding must be invertable in order to decrypt the message, so both matrices have to be invertable. 
+
+$S$ is randomly chosen with the dimension of the amount of rows of $G$. By performing the matrix multiplication $S * G$, the information of $G$ is ``scrambled''. It is important to note that the properties of the Goppa code still hold because it stays in the same equivalence class \cite{ryanequivalent}. 
+
+If $G'$ remains in the same equivalence class this reduces the security of the system. To change the an additional computation has to be performed. For this the permutation $P$ of dimension of the amount of columns of $G$ is needed. $P$ changes the equivalence class of $SG$ so that an attacker can't get any information on the selected $G$. 
+
+Relating to the example in \autoref{example}: Leaving $P$ during the key generation works fine. Bob is able to decode the message from Alice, but also an attacker is able to do so. For this $P$ is needed and sequence of decoding is defined in this way. 
 
 \subsection*{Correctness}
 Assuming that $P$ is a permutation matrix and random vector $z$ with length $n$ and weight $t$, it obvious and can easily be computed that $zP^{-1}$ has a weight of $t$ or less.
@@ -121,22 +142,29 @@ The chosen Goppa code $C$ is designed to correct up to $t$ errors. On the other 
 To obtain the message block $m$ from $mS$, we can easily multiply the inverse $m = mSS^{-1}$\cite{wiki:mcelice}.
 
 \subsection*{Security properties}
-The security of the presented scheme refers on the one hand to the basics of learning with errors principle. More precise the hypothesis of \textit{Learning Parity with Noise}\cite{pietrzak2012cryptography} which is not discussed in this article. \todo{ausweiten --> paper}
-On the other hand it refers to the hypothesis that the generator matrix $G$ has to be indistinguishable from any other $k \times n$-matrix. This leads to the property of a trapdoor function.
+The security of the presented scheme refers on the one hand to the basics of the learning with errors principle. More precisely the hypothesis of \textit{Learning Parity with Noise}\cite{pietrzak2012cryptography} which is not discussed in this article. \todo{ausweiten --> paper}
+On the other hand, it refers to the hypothesis that the generator matrix $G$ has to be indistinguishable from any other $k \times n$-matrix. This leads to the property of a trapdoor function.
 
 %Unter der Learning-Parity-with-Noise-Annahme und der Annahme, dass G^ ununterscheidbar von zufällig k × n Matrizen ist, besitzt das Verfahren die Einwegeigenschaft.
 
 \section{The Niederreiter cryptosystem in comparison to McEliece}
 \label{niederreither}
-\todo[inline]{Braun: Bei Niederreiter: Was ist eine Kontrollmatrix.}
-The Niederreiter cryptosystem is highly comparable to the McEliece cryptosystem due to the fact that it is following the same basic idea. 
+\todo[inline]{Braun: Bei Niederreiter: Was ist eine Kontrollmatrix. (--> Parity Check Matrix)}
+The Niederreiter cryptosystem is highly comparable to the McEliece cryptosystem due to the fact that it is following the same basic idea. More details about the underlying coding theory can be found in \autoref{coding}.
 
-Niederreiter designed his $(n, k, 2t + 1)$ linear code $C$ over a Galois field too. In contrast to McEliece the code size does not have to be a power of 2 instead of an arbitary integer $GF(q)$. Another difference to McEliece is the usage of a $(n - k) \times (n)$ parity check matrix $H$ instead of the generator matrix $G$. The nonsigular $(n - k) \times (n - k)$ matrix $M$ is defined sightly different from McEliece ($k \times k$)\todo{why?}. The permutation matrix $P$, an arbitrary $n \times n$ matrix, is exactly defined in the same way compared to McEliece. The private key is then defined as $M, H$ and $P$, the public key consists of $H' = MHP$ and the hamming weight $t$ which is quite the same compared to McEliece.
+Niederreiter designed his $(n, k, 2t + 1)$ linear code $C$ over a Galois field, too. In contrast to McEliece, the code size does not have to be a power of 2 instead of an arbitary integer $GF(q)$. Another difference to McEliece is the usage of a $(n - k) \times (n)$ parity check matrix $H$ instead of the generator matrix $G$. A parity check matrix is able to determine the error positions in a word, the so called syndrome, and can be computed directly from the generator matrix \footnote{Refer also to \ref{coding} for more details.}. Consequently, syndromes are used for the en- and decryption in contrast to error containing messages. 
+
+The nonsigular $(n - k) \times (n - k)$ matrix $M$ is defined sightly different from the McElieces ($k \times k$) matrix $S$ because of the different dimensions of parity check matrix. 
+
+The original work of Niederreiter, the permutation matrix $P$, an arbitrary $n \times n$ matrix, is defined in the same way compared to McEliece. \footnote{Newer works like \cite[P. 69ff]{baldi2014qc} did not consider a permutation. The necessarity of a permutation stays a topic of investigation.} 
+
+
+The private key is then defined as $M, H$ and $P$, the public key consists of $H' = MHP$ which again is comparable to McEliece. Additionally, the hamming weight $t$ is part of the public key. This has to be the case because encrypted messages are syndromes, whose  number of bit with the value 1 has to be lower than the hamming distance in order to decode them.
 \newline
-The messages $y$ in the system of Niederreiter have to be $n$ dimensional vectors over $GF(q)$ and they must have a hamming weight of $t$. This is an important fact issuing the signature creation in \autoref{signature}\todo{why?}.
-Encryption with Niederreiter is performed with $z = yH'^T$ which again is comparable with the encryption operation $x = uG' + z$ in McEliece except that there is no error vector needed because it is already represented in $H'$. The ciphertext consist of the syndrome and has only $n - k$ bit dimension compared to $n$ bit in McEliece. 
+The messages $y$ in the system of Niederreiter have to be $n$ dimensional vectors over $GF(q)$ and they must have a hamming weight of $t$ or less. This is an important fact, issuing the signature creation in \autoref{signature}.
+Encryption with Niederreiter is performed with $z = yH'^T$ which again is comparable to the encryption operation $x = uG' + z$ in McEliece except that an error vector is unnecessary because of the encoding with $H'$ reveals a syndrome. The ciphertext consist of the syndrome and has only $n - k$ bit dimension compared to $n$ bit in McEliece. 
 \newline
-The decryption is computed firstly with $(yP^T)H^T = z(M^T)^{-1}$ Then $H$ is eliminated by an error correction algorithm which leads to $(yP)^T$ which can easily computed to the plaintext $y$. \cite{sendrier2011niederreiter}\cite{li1994equivalence}\cite{niederreiter1986knapsack}
+The decryption is computed firstly with $(yP^T)H^T = z(M^T)^{-1}$ . Then $H$ is eliminated by a syndrome decoding algorithm \cite[P. 332ff]{macwilliams1977theory} which leads to $(yP)^T$ which can  easily be computed to the plaintext $y$. \cite{sendrier2011niederreiter}\cite{li1994equivalence}\cite{niederreiter1986knapsack}
 
 %This is a knapsack-type cryptosystem which employs an(n, k , 2t + 1)linear code C over GF(q). Let E be an ( n - k) x nparity check matrix of C, M any ( n - k ) x (n - k) nonsingularmatrix, and P any n x n permutation matrix, all over GF(q).
 %Private Key: E , M , and P.
@@ -152,59 +180,103 @@ The decryption is computed firstly with $(yP^T)H^T = z(M^T)^{-1}$ Then $H$ is el
 
 \section{Signing with Niederreiter}
 \label{signature}
-Besides en- and decryption signature building and verification is an common requirement to an asymmetric cryptoscheme. In state of the art algorithms principal is quite simple: The message to be signed is \textit{de}crypted with a given public key. The verifier \textit{en}crypts the message with his private key an compares the result with the message. 
+Besides en- and decryption signature building and verification is an common requirement to an asymmetric cryptoscheme. In state of the art algorithms the principal is quite simple: The message to be signed is \textit{de}crypted with a given public key. The verifier \textit{en}crypts the message with his private key and compares the result with the message. 
 
-In the case of McEliece this is not so easy because there is no possibility to decrypt (= sign) an message before encrypting (= verify) it. More precise in most cases the process of signing produces a syndrome whose \todo{dessen} error pattern is bigger than the error correcting property $t$. In fact it is hard to create a ciphertext that fits to the error correcting properties of the encryption without using it. 
+In the case of McEliece, this is not so easy because there is no possibility to decrypt (= sign) a message before encrypting (= verify) it. More precisely in most cases the process of signing produces a syndrome whose \todo{dessen} error pattern is bigger than the error correcting property $t$. In fact, it is hard to create a ciphertext that fits to the error correcting properties of the encryption without using it. 
 
 
-Compared to en- and decryption signing and verifying is much harder to realise with McEliece. Just in 2001 a digital signature scheme were presented by Courtois et. al. The problem with signing a given hash value $n$ is that generally it has a higher hamming weigth than the decoding capacity $t$ of the used code is. More general one can say that it is difficult to generate a random ciphertext without using the encyption algorithm. \cite{courtois2001achieve}
+Compared to en- and decryption, signing and verifying is much harder to realize with McEliece. Just in 2001, a digital signature scheme were presented by Courtois et. al.\cite{courtois2001achieve}. The problem with signing a given hash value $n$ is that generally, it has a higher hamming weight than the decoding capacity $t$ of the used code is. More generally, one can say that it is difficult to generate a random ciphertext without using the encyption algorithm. 
 
 
 \subsubsection*{Complete decoding}
-One possible solution would be to use complete decoding. Therefore not only words within the radius of $t$ can be decoded but all words laying in the code space. In other words with complete decoding we can find an error pattern to any given syndrome as long as it is in the code space. This means that we have to add a $\delta$ with random collumns from the parity check matrix\todo{why pc-matrix}to $t$. The decoding works exactly when all of the $\delta$-columns fit to an error position because then the syndrome will fit to an word of weight $t$. Else we have to iteratively add another $\delta$ to $t$ and try again.
+One possible solution would be to use complete decoding. Thereby not only words within the radius of $t$ can be decoded but all words situated in the code space. In other words, with complete decoding we can find an error pattern to any given syndrome as long as it is in the code space. This means that we have to add a $\delta$ with random columns from the parity check matrix\todo{why pc-matrix}to $t$. The decoding works exactly when all of the $\delta$-columns fit to an error position because then the syndrome will fit to an word of weight $t$. Else, we have to iteratively add another $\delta$ to $t$ and try again.
 
-From this properties we now can construct a digital signature scheme: We have to select a $\delta$ which is small enough to get an usable key size but on the other hand has a good security. 
+From these properties we can now construct a digital signature scheme: We have to select a $\delta$ which is small enough to get an usable key size but on the other hand has a good security. 
 
-For achieving a small $\delta$ the code has to be selected carefully in the way that it has to have a high density of decodable syndromes. This makes sure that the $\delta$ is kept small because the probability of finding a fitting one is high. For building up a signature the signer now takes a syndrome and hashes it together with the document. This is tried as long as he gets a decodable syndrome with modifying the document with every try (possibly with some kind of padding) . \cite{courtois2001achieve}
+For achieving a small $\delta$, the code has to be selected carefully in the way that it has to have a high density of decodable syndromes. This makes sure that the $\delta$ is kept small because the probability of finding a fitting one is high. For building up a signature, the signer now takes a syndrome and hashes it together with the document. This is tried as long as he gets a decodable syndrome by modifying the document with every try (possibly with some kind of padding) . \cite{courtois2001achieve}
 
 
 
-\section{Codes can be used for McEliece and Niederreiter} \todo{both the same?}
-\todo[inline]{Was macht prinzipiell ein Decodierungsalgorithmus? Wie wird aus einem empfangenen Vektor ein Codewort? Was ist eine Generatormatrix?}
-As described in the last sections the McEliece cryptosystem is based on the properties error correcting codes. In principle many codes with a good decoding algorithm could be used for the cryptosystem. However there are some properties which leads to higher security than others. In this section a short introduction to the basics of error correcting codes is presented followed by a deeper view on Goppa codes which are suggested by McEliece and are still the best choice.
+\section{Error correctiong Codes} \todo{RENAME}
+\label{coding}
+As described in the recent sections, the McEliece cryptosystem is based on the properties of error correcting codes. In this section, a short introduction to the basics of error correcting codes is presented, followed by a closer look at linear block codes such as Goppa codes, which are suggested by McEliece and still are the best choice.
 
-\todo{what makes a code usable}
+%In principle many codes with a good decoding algorithm could be used for the cryptosystem. However there are some properties which leads to higher security than others. 
+
+Facing the task of transferring information from sender to a receiver, four types of ``encoding'' can be done for different purposes: 
+\begin{itemize}
+	\item \textbf{Data compression:} \textit{Reducing} the amount of data\footnote{''Data'' refers to the binary word which represent the information to be transferred.} by exploiting statistical redundancy in it.
+	\item \textbf{Error correction:} \textit{Adding} redundant data for detecting and correcting errors during transmission. 
+	\item \textbf{Cryptographic encoding:} \textit{Changing} data in the way that only a legitimate receiver is able to read the information.
+	\item \textbf{Line coding:} \textit{Representing} binary information as analogue signal in the transmission medium.
+\end{itemize}
+Typically, these approaches are combined to reach an efficient, and secure communication.\cite[323ff.]{hoffmann2014einfuhrung}
+
 \subsection*{Principles of error correcting codes}
-As the name states the basic purpose of error correcting code is to detect and correct errors which occur during the transition of messages. Therefore additional information is added to the message by the sender. Knowing the encoding algorithm receiver is able to decode the original word, detect errors and correct them with help of the additional information and the corresponding decode algorithm. 
-\todo{start earlier: principles of error correction}
+As the name states, the basic purpose of an error correcting code is to detect and correct errors which occur during the transition of messages. For this additional information is added to the message by the sender following an certain encoding algorithm. Knowing this algorithm, the receiver is able to decode the original word, detect errors and correct them with help of the additional information and the corresponding decoding algorithm. 
+
+In this section a slight overview from fundamentals of coding theory to the binary goppa codes is presented to get an understanding of underlaying principles. 
+\subsection*{Overview on common block codes}
+In this section block codes are discussed. Systematic codes, as trivial approach, are discussed slightly followed by linear codes which are used in the McEliece cryptosystem. The hamming code serves as an illustrating example for a linear block code. 
+
+As an alternative to block codes, convolutional codes should be mentioned which are not described in this article. 
+
+\subsection*{Parity checks and cyclic redundancy checks}
+The easiest way of adding redundant information is to provide a parity check bit. For this, an one is added if the information word has an odd parity and a zero otherwise. With this method, it is possible to detect an error of one bit, but it is not possible to say where the error has happened. 
+
+Cyclic redundancy checks follow the same approach but is using a generator polynomial instead of a single bit. Therefore, a message is simply divided through a generator polynomial, which in binary can be seen as a bitwise $XOR$-operation. The rest of the division is added to the message. By dividing the sent message incl. the check value through the generator, the amount of errors can be revealed. Depending on the properties of the generator polynomial, the error positions can be determined and corrected.\cite{schonfeld2012informations}
+
+\subsection*{Linear codes}
+Linear codes are defined over a finite vector space $F^{n}_{q}$ over a finite field $\mathbb{F}_{q}$. All codewords are elements of $F^{n}_{q}$, so the whole code is defining \todo{formen} a subspace $C$.
+
+Because of this property a base $g_1, ..., g_k$ exists which forms a generator matrix $G$ for $C$. Additionally there is a parity check matrix $H$ with the property that for every codeword $c$ $Hc^T = 0$ holds. $H$ can easily be computed from $G$ with help of linear algebra by tranforming $G$ into $G = (\mathbb{E}_k | P)$, where $\mathbb{E}_k$ denotes the $k$-dimensional indentity matrix. Finally $H$ reveals as $H = (P^T | \mathbb{E}_{n-k})$. A linear code is defined by either $G$ or $H$.
+
+Linear codes are based on operations of the linear algebra and therefore are computational easy to en- and decode.
+As described in \autoref{mceliece} linear codes are defined as $[n, k, d]$-code where $k$ defines the dimension of the linear subspace and following from this the rank of $G$, $n$ the length of a message and revealing from this the rank of $k$ is defined as $n - k$. $d$ denotes the resulting Hamming distance which also is the minimal amount of linear independent columns in $k$.\cite{schonfeld2012informations}
+
+\paragraph*{Encoding}
+The encoding of a $k$-bit \textit{message} $x$ to an $n$-bit \textit{code} is simply done by the multiplication $c = x * G$.
+
+\paragraph*{Decoding}
+\label{alg_decoding}
+For getting back the original message a decoding algorithm is needed. It should be noted, that the received message $c'$ could contain errors which can be corrected up to $\lfloor \cfrac{d - 1}{2}\rfloor$ errors. This is in general not performed by inverting the encoding, but determining the codeword which is next "neighbour" $c$ to received $c'$. This can be done with the help of the Hamming distance by computing the minimum distance of all codevectors $c = argmin\{hammingweight_{y\in C}(c' - y)\}$. The result can contain only one vector if a perfect code is used. 
+
+Besides the maximum likelihood decoding sketched above, syndrome decoding is a more efficient method for finding the related message word. A syndrome $s_{x}$ of any vector $x$ can be computed by $s_{x}^T = H * x^T$. The error vector results from $e = x - c$ and contains $1$-entries at all position where an error occurred. Because of the property of linearity also $s_{x}^T = Hc^T + He^T$ holds true. This leads to the fact that all messages with the same error vector $e$ are in the same subfield and have the same syndrome $s_e^T$. 
+
+To decode $x$ to $c'$, an error vector $e'$ has to be determined which syndrome has minimal hamming weight and is identical to the syndrome of $x$. Therefore the coset of the subfield $C$ has to be formed by subtracting one certain vector from one arbitrary codevector. All resulting vectors then form the coset, which can be seen as list, and the vector with minimal hamming weight is called the coset leader. 
+
+With this error vector  $c' = x - e'$ is calculated. 
+
+Having $c'$ and the matrix which connects an error vector to a syndrome, it is easy to read the syndrome from the error vector, swap $1$-positions of the code word $c'$ and finally compute the message $x = c' * G$.\cite{greferath2009introduction}
+
+\subsection*{Properties of codes can be used for McEliece and Niederreiter} % \todo{RENAME}
+Goppa codes are the class of error correcting codes which are suggested for the McEliece cryptosystem. They are following the principles of linear block codes, which is described previously.  This section highlights some special properties and backgrounds of codes which are used with the McEliece cryptosystem. Firstly some important basic properties and terminologies are presented, which have been use implicitly in the previous sections.
+
+
 \subsubsection*{Binary} Due to the fact that almost all transition is performed by computers and is in binary the explanations in following are focussed on the binary case too. Never the less all of them hold in the general case. 
 
 %creating a code
-For generating these additional information a vector with binary indexes $V = {[c1 c2...cn] |ci \in {0, 1}}$ is created as set of $\mathbbm{F}_2$. Further the addition is defined componend-wise modulo 2, which also can be seen as XOR operation. With this definition $V$ covers all $n$-tuples in $\mathbbm{F}_2$. 
-Having this, a binary, linear $[n, k]$ code can be defined as subspace of $\mathbbm{F}_2$ in which the $n$ is the length and the $k$ is the dimension. A codeword is represented as vector in the code.
+For generating these additional information a vector with binary indexes $V = {[c1 c2...cn] |ci \in {0, 1}}$ is created as set of $\mathbbm{F}_2$. Further the addition is defined componend-wise modulo 2, which also can be seen as a $XOR$-operation. With this definition $V$ covers all $n$-tuples in $\mathbbm{F}_2$. 
+Having this, a binary, linear $[n, k]$ code can be defined as subspace of $\mathbbm{F}_2$ in which the $n$ is the length and the $k$ is the dimension. A codeword is represented as vector in the code.\cite{mceliece1978public}
  
 %Let V = {[c1 c2 · · · cn] |ci ∈ {0, 1}}, where addition in V is component-wiseaddition (mod 2). So V is the set of all n-tuples of elements of F2 . Then we define an [n, k] binary∼ nlinear code as a k-dimensional subspace of V = F2 . The parameters n and k are called the lengthand dimension, respectively, of the [n, k] binary linear code. Throughout the remainder of thispaper we will use the word code to mean a binary linear code. A codeword is any vector in the code.
 
 \subsubsection*{Hamming distance} Another important variable for error correcting codes is the hamming weight or more precise the minimum weight $d$ of a vector. The weight is simply defined as count of non-zero positions in the vector. Furthermore the minimum weight is defined as minimum is the smallest weight of a codeword under the condition that it is not zero. 
 A $[n, k, d]$ code can correct $t =  \lfloor \cfrac{d - 1}{2}\rfloor$ errors. 
 
-\subsection*{Goppa Codes}
-\label{goppa}
-Goppa codes follow the principals described previously. In this section highlights the special basics (of Goppa codes) regarding the McEliece cryptosystem. Firstly some important basic properties and terminologies are presented. In the second part an example is discussed\todo{DO SO}. 
 
 \subsubsection*{Linearity}
-Goppa Codes are linear codes. This is not a conincidence because non-linear codes do not provide an efficient decoding algorithm like Pattersons algorithm for linear codes does\cite{patterson1975algebraic}. In \cite{zeng2014nonlinear} some remarkable results to achieve more efficiency are stated but also it is mentioned, that nonlinear codes are not able to achieve more comparable efficiency. 
-However most of the popular codes are linear ones this condition does not rule out so many codes.
+Goppa Codes are linear codes. This is not a coincidence because non-linear codes do not provide an efficient decoding algorithm like Pattersons algorithm for linear codes does\cite{patterson1975algebraic}. In \cite{zeng2014nonlinear} some remarkable results to achieve more efficiency are stated but also it is mentioned, that nonlinear codes are not able to achieve more comparable efficiency. 
+However  as most of the popular codes are linear ones this condition does not rule out so many codes.
 
 \subsubsection*{Irreducibility} 
-y
-\todo[inline]{das könnte auch in ECC, da alle eccs durch polynomer erzeugt werden können und die irreduzibel sein müssen oder?}
 To achieve a finite field with usable properties for a Goppa code the generator polynomial has to bew irreducible. This means that for a polynomial $p$ over a finite field $GF(p^m)$ there exists no polynomial $p' \in GF(p^m)$ of lower degree which divides $p$.
  
 
-\subsubsection*{Efficency(?)} To keep the keyspace as efficient as possible the factor between the matrix dimensions $n$, $k$ and the error correction range $t$ (respectively the minimum hamming distance $d$) should be as high as possible. The most important point is that Goppa Codes are a suspect of research for years so the probability of is really low. 
+\subsubsection*{Efficency} To keep the keyspace as efficient as possible the factor between the matrix dimensions $n$, $k$ and the error correction range $t$ (respectively the minimum hamming distance $d$) should be as high as possible. The most important point is that Goppa Codes are a suspect of research for years so the probability of success is really low. 
 
-
+\subsubsection*{Insights of Goppa codes} McEliece selected the code for his cryptosystem carefully because many other linear block codes the McEliece cryptosystem was tried with were broken in the past (e.g. \cite{sidelnikov1992insecurity}). Goppa codes have some properties which are usable for cryptographic applications. For example the lower bounds of the minimum distance is easy to compute, which helps constructing a secure code. Also only the entity knowing the generator polynomial has th possibility to perform efficient error correction, which makes attacking the scheme harder. The third point is that there is no efficient algorithm known, which performs the error correction whithout knowing the gernerator polynomial\cite{engelbert2007summary}.
+\todo[inline]{Was macht prinzipiell ein Decodierungsalgorithmus? Wie wird aus einem empfangenen Vektor ein Codewort? Was ist eine Generatormatrix?}
 
 %Basic properties: 
 %Binary OK
@@ -215,10 +287,10 @@ To achieve a finite field with usable properties for a Goppa code the generator 
 
 \section{Example of the McEliece cryptosystem}
 \label{example}
-In \autoref{mceliece} the threoretical the aspects of the McEliece cryptsystem are described. To illustrate the algorithm more into detail an example is provided in this section. Note that the parameter are far to small an the code is based on much simpler hamming codes\todo{?}.
+In \autoref{mceliece}, the theoretical aspects of the McEliece cryptsystem are described. To illustrate the algorithm more in detail an example is provided in this section. Note that the parameters are far too small and the code is based on much simpler Hamming codes\todo{?}.
 \newline
-Consider Alice and Bob as two entities who want to communicate encrypted. 
-Therefore Bob chooses the following matrix $G$ as generator: 
+Consider Alice and Bob as two entities who want to communicate encryptedly. 
+For this, Bob chooses the following matrix $G$ as generator: 
 \begin{center}
 $
 G =
@@ -230,7 +302,7 @@ G =
 \end{Bmatrix}
 $
 \end{center}
-Additionally a matrix  $S$ to obscure the generator is chosen by Bob:
+Additionally, a matrix  $S$ to obscure the generator is chosen by Bob:
 \begin{center}
 	$
 	S =
@@ -281,7 +353,7 @@ x =
 \end{Bmatrix}
 $ 
 \end{center}
-Therefore she chooses a random error vector $e$:
+For this, she chooses a random error vector $e$:
 \begin{center}
 	$
 	e =
@@ -308,7 +380,9 @@ This codeword is sent to Bob who decodes the word with $P^{-1}$ which leads to:
 	\end{Bmatrix}
 	$
 \end{center}
-Now the fast decoding algorithm enters the scene\footnote{Note that in this example the Hamming deconding is executed to demonstrate the wordwise.}. In this case Bob compares the result to the rows of $G$. The row with the lowest Hamming distance \todo{?} is the corresponding codeword which leads to: 
+Now the fast decoding algorithm enters the scene. Note that in this example the deconding is done by heart with the approach of maximum likelihood decoding. In \autoref{alg_decoding} more details on decoding algorithms can be found. 
+
+In this case, Bob compares the result to the rows of $G$. The row with the lowest Hamming distance is the corresponding codeword which leads to: 
 \begin{center}
 	$
 	y = x*G'+e =
@@ -317,7 +391,7 @@ Now the fast decoding algorithm enters the scene\footnote{Note that in this exam
 	\end{Bmatrix}
 	$
 \end{center}
-Because of the structure in $G$ is the identity matrix \todo{?} the first four digits are taken as error vector \todo{?}.
+Because of the structure of $G$, which has an identity matrix on the left hand side, the first four digits are taken as error vector.
 The last step to decrypt the message is to multiply the error vector $xS$ with $S^{-1}$:
 \begin{center}
 $
@@ -351,7 +425,7 @@ If Alice wants to encrypt the message
 	\begin{Bmatrix}
 	1 & 1 & 0 & 1 \\
 	\end{Bmatrix}
-	$ the decrypted word which is sent to Bob is 
+	$, the decrypted word which is sent to Bob is 
 	$
 	y = 
 	\begin{Bmatrix}
@@ -374,12 +448,12 @@ $
 1 & 0 & 0 & 1
 \end{Bmatrix}
 $.
-From these two examples we can see that flipping a single bit can lead to a code of an other ``domain'' ($
+From these two examples we can see that flipping a single bit can lead to a code of another ``domain'' ($
 \begin{Bmatrix}
 0 & 1 & 0 & 0 \\
 \end{Bmatrix}
 $ in this case) during encryption which is correctly decrypted because of the usage of similar codes.
-The behavior can be seen when the $1$-digit of the error vector is changed. Note that an error vector of Hammingweight $> 1$ is not working properly because of the error correcing capabilities of the code. 
+The behavior can be seen when the $1$-digit of the error vector is changed. Note that an error vector of Hamming weight $> 1$ is not working properly because of the error correcting capabilities of the code. 
 % Endweder
 % Usability & Keylengths
 % -> Keylengths
@@ -393,87 +467,89 @@ The behavior can be seen when the $1$-digit of the error vector is changed. Note
 \todo[inline]{ab hier eher ausblick --> further topics}
 \section{Further topics}
 \label{further_topics}
-To get an elaborated overview over all facets of the McEliece cryptosystem many more topics have to be issued which are not covered in detail in the article. In this sections some of the most important topics are described slightly. 
+To get an elaborated overview over all facets of the McEliece cryptosystem, many more topics have to be issued which are not covered in detail in the article. In this section, some of the most important topics are breifly described. 
 
 
 \todo{ausweiten aber niedrige prio}
 \subsection*{Resistency against various attacker models}
-For a cryptoanalyst attacker models are the first choice to design attacks an given scheme. Two of the most common attacker model and resistance approaches are slightly presented in this section.
+For a cryptoanalyst attacker, models are the first choice to design attacks on a given scheme. Two of the most common attacker model and resistance approaches are briefly presented in this section.
 
 %http://crypto.stackexchange.com/questions/33383/how-is-mceliece-chosen-plaintext-secure
 \paragraph*{Chosen plain text resistance}
-Chosen plaintext restance means that an attacker own two different plaintexts $p_1$ and $p_2$ and gets two belonging ciphertexts $c_1$ and $c_2$ he has no chance to gather information from the ciphertext which tells him that it belongs to plaintext $p_1$ or $p_2$.
+Chosen plaintext resistance means that an attacker owns two different plaintexts $p_1$ and $p_2$ and gets two belonging ciphertexts $c_1$ and $c_2$. He has no chance to gather information from the ciphertext which tells him that it belongs to plaintext $p_1$ or $p_2$.
 %The original idea of McEliece is not safe against this kind of attack because the attacker is able to use the error correctiong properties to 
-The attaacke is able to use the two known plantexts and a randomly chosen message to compute a sample $c$. This is now subtracted during the decryption because
-Now the attacker can easily compute the message because one of $e_1$ or $e_2$ is the right error vector. He can determine the right message by seeing that it has less than 2t-1 non zero terms in it.
+%The attacker is able to use the two known plaintexts and a randomly chosen message to compute a sample ciphertext $c$. This is now subtracted during the decryption because of the properties of the algorithm.
+%Now the attacker can easily compute the message because one of $e_1$ or $e_2$ is the correct error vector. He can determine the right message by seeing that it has less than 2t-1 non zero terms in it. \todo{cite}
+It is obvious that the McEliece cryptosystem in its basic idea is not resistant against those attacks. Obtaining a ciphertext $c$ and knowing that it is either of the plaintext $m_1$ or $m_2$, an attacker can easily compute the weight of $m_1$ by $m_1 * G' \oplus c $ and check if it is the same compared to weight $w$ transmitted within  the public key \footnote{Note that the authors assumed, that the McEliece cryptosystem is transferrring a Hamming weight as public key, too.}.
 
-
+An easy approach to avoid this and to gain IND-CPA is to simply add random sequence $r$  the message e.g. in the way $[r|m]$. \cite{nojima2008semantic}
 \paragraph*{Chosen cipher text resistance}
 Like the RSA cryptosystem in the original idea is not resistant against chosen cipher attacks. 
 
-This means if an attacker has access to an oracle which is able to decrypt an given ciphertext without knowing the key and the attacker is permitted to give all ciphertexts except the one he is asked to crack to the oracle he is not able to gather any reasonable information from the oracle. This goes over several iterations and is called CCA2-attack in the literature. Resistance against this attack is described as IND-CCA2. 
+This means if an attacker has access to an oracle which is able to decrypt a given ciphertext without knowing the key and the attacker is permitted to give all ciphertexts except the one he is asked to crack to the oracle, he is not able to gather any reasonable information from the oracle. This goes over several iterations and is called CCA2-attack in the literature. Resistance against this attack is described as IND-CCA2. 
 
-Like the RSA cryptosystem uses padding standards such as PSS for signing and OAEP for encrypting to achieve IND-CCA2 the MECS has some advanced padding and randomization schemes as well. The common approach on this is to add  random vectors and perform shift operations on the ciphertext during the encryption\cite{dottling2012cca2}. 
+Like the RSA cryptosystem uses padding standards such as PSS for signing and OAEP for encrypting to achieve IND-CCA2, the McEliece cryptosystem has some advanced padding and randomization schemes as well. The common approach on this is to add  random vectors and perform shift operations to the ciphertext during the encryption\cite{dottling2012cca2}. 
 
 \subsection*{Practical security attacks}
 \label{keylength}
-Every cryptosystem with certain parameters has to hold against attacks to be considered as safe. These attacks can be very different for every cipher suite. 
-For the McEliece cryptosystem there are two types of promising attacks named structural and information set decoding attacks. 
-\paragraph*{Structural attacks} describes the approach of constructing a code for the information of code generated by the public key $G'$. If this succeeds the private key $G$ is revealed. 
-To fullfill such an attack an equivalent code $E$ to $G'$ has to be found, which means that a permutation $m$ exists which permutes $G'$ to $E'$. Then $E'$ generated by $G'$ and the $E$ generated by $G$ are from the same class. 
-Because of knowing this dependence an attacker can compare a representant from each of such classes to $E'$ to get an equivalent code. This still is a huge computational problem which is not solvable is sufficient time because the cardinality of such an equivalent matrix is small. \cite{au2003mceliece}
+Every cryptosystem with certain parameters has to hold against attacks in order to be considered as safe. These attacks can be very different for every cipher suite. 
+For the McEliece cryptosystem, there are two types of promising attacks, named structural and information set decoding attacks. 
+\paragraph*{Structural attacks} describes the approach of constructing a code for the information of the code generated by the public key $G'$. If this succeeds, the private key $G$ is revealed. 
+To fulfil such an attack, an equivalent code $E$ to $G'$ has to be found, which means that a permutation $m$ exists which permutes $G'$ to $E'$. Then $E'$ generated by $G'$ and the $E$ generated by $G$ are from the same class. 
+Knowing this dependence, an attacker can compare a representant from each of such classes to $E'$ to get an equivalent code. This is still a huge computational problem which is not solvable in sufficient time because the cardinality of such an equivalent matrix is small. \cite{au2003mceliece}
 
 %The easiest approach of an structural attack is the brute force attack in which every possible private key is tried out to decrypt the message. 
 
-\paragraph*{Information set decoding} is the most promising method of breaking McEliece so far. The idea behind this is to find a set of error free coordinates in a codeword. If the corresponding columns in the generator matrix form a invertible submatrix the information from original message word can be obtained easily. 
+\paragraph*{Information set decoding} is the most promising method of breaking McEliece so far. The idea behind this is to find a set of error free coordinates in a codeword. If the corresponding columns in the generator matrix form an invertible submatrix, the information from original message word can be obtained easily. 
 
- If there is a (n,k,t) code of a generator $G$ and a ciphertext $c = uG + e \in  \mathbbm{F}^n_2$. An attacker now randomly selects a subset (the information set) $I \subset 1, ..., n$ of size k beeing linearly independent. Now an ``masking'' function $\delta$ is needed which projects $c$ on $I$ such as $\delta(c)_{i \in I} = (uG)_{i\in I}+e_{i\in I}$
+ Assume there is a $(n,k,t)$ code of a generator $G$ and a ciphertext $c = uG + e \in  \mathbbm{F}^n_2$. An attacker now randomly selects a subset (the information set) $I \subset 1, ..., n$ of size k being linearly independent. Now a ``masking'' function $\delta$ is needed which projects $c$ on $I$ such as $\delta(c)_{i \in I} = (uG)_{i\in I}+e_{i\in I}$.
  
- If this projection leads to a error free result (also $weight(e) = 0$) we can obtain the message word from the code by $\delta(r)* \delta(G)^{-1} = \delta(uG)^{-1}*\delta(G)^{-1} = u$. 
- But this is not the common case an typically needs many iterations.
+ If this projection leads to an error free result (also $weight(e) = 0$), we can obtain the message word from the code by $\delta(r)* \delta(G)^{-1} = \delta(uG)^{-1}*\delta(G)^{-1} = u$. 
+ But this is not the common case and typically needs many iterations.
  
- Note that information set decoding is not an total break of the system because it does not reveal the private key but only the message word corresponding to th codeword. 
+ Note that information set decoding is not a total break of the system because it does not reveal the private key but only the message word corresponding to the codeword. 
   %an generates \hat{G}_I from it and the public key. He now hopes that the generated matrix is invertible so that he can obtain the information from original message word.  contains no errors 
 
 
 \subsection*{Recommended parameters}
-In \cite{niebuhr2012selecting} Niebuhr et al computed some key length based on the Model of Lenstra and Verheul. They motivated that keylength have to grow with speedup of computer hardware and concluded state of the art keylenths of traditional algorithms which is ported to the McEliece Cryptosystem by Niebuhr et al. Based on the best known attack of Sendrier at al, which is able to break the original parameters ($n = 1024$, $k = 524$, $t = 50$) with a minimal binary work factor of $2^59,9$ operations \cite{finiasz2009security}, they presented the following values as secure parameters until the year 2050: $n = 2804$, $k = 2048$ and $t = 66$. A public key generated has a size of about 189 kilobyte. This is almost 400 times more keyspace than a RSA key and almost 3000 times more than an eliptic curves key which promises safety until 2050 too, but only on conventional computers. The key size issue is decribed a liitle more into detail in \ref{space_efficiency}.
+In \cite{niebuhr2012selecting}, Niebuhr et al computed some key length based on the Model of Lenstra and Verheul. They proofed that the keylength has to grow with speedup of computer hardware and concluded state of the art keylenths of traditional algorithms which is ported to the McEliece Cryptosystem by Niebuhr et al. Based on the best known attack of Sendrier at al, which is able to break the original parameters ($n = 1024$, $k = 524$, $t = 50$) with a minimal binary work factor of $2^59,9$ operations \cite{finiasz2009security}, they presented the following values as secure parameters until the year 2050: $n = 2804$, $k = 2048$ and $t = 66$. A public key has a size of about 189 kilobyte. This is almost 400 times more keyspace than a RSA key and almost 3000 times more than an eliptic curves key which promises safety until 2050, too, but only on conventional computers. The key size issue is decribed a little more into detail in \autoref{space_efficiency}.
 
 
 \subsection*{Challenges and optimizations} %Open Challanges
-From the practical point of view the presented schemes more sketches of one way trapdoor functions than fully filled crypto schemes. These trapdoors can be used in many different ways to generate a ``standard'' crypto scheme maybe as replacement for RSA- and ECC-cryptography, but this has to be done carefully. In this section a short summary of the challenges are such as usability properties, computation time and key sizes is presented \todo{followed by some variants of the scheme. ???} These three topics are highly connected to each other. 
+From the practical point of view the, presented schemes are more sketches of one way trapdoor functions than fully filled crypto schemes. These trapdoors can be used in many different ways to generate a ``standard'' crypto scheme maybe as replacement for RSA- and ECC-cryptography, but this has to be done carefully. In this section, a short summary of the challenges, such as usability properties, computation time and key sizes is presented. \todo{followed by some variants of the scheme. ???} These three topics are highly connected to each other.\cite{bernstein2009introduction}
 
 \subsubsection*{Confidence}
 \label{confidence}
-One of the most delicate tasks when putting an abstract algorithm into a real crypto application is to achieve confidence into\todo{from?} it. Many pitfalls like wrong codes or parameters and weak padding algorithms have to discovered by cryptoanalysts to increase the confidence level. However both, the RSA and the McElice where suggested over 35 years ago, the development on RSA was pushed forward much faster because of the adavantage of a lower keyspace. This development has to be done in the next years for McEliece to get over issues discoverd in the past and achieve an optimized reliable system. 
+One of the most delicate tasks when putting an abstract algorithm into a real cryptographic application is to achieve confidence into it. Many pitfalls like wrong codes or parameters and weak padding algorithms have to be discovered by cryptoanalysts to increase the confidence level. Although both the RSA and the McElice where suggested over 35 years ago, the development on RSA was pushed forward much faster because of the adavantage of a lower keyspace. This development has to be done in the next years for McEliece to get over issues discoverd in the past and achieve an optimized and reliable system.
 
 \subsubsection*{Efficiency}
-In most cases the abstract term ``efficiency'' is divided in time- and space efficiency. Daniel J. Bernstein made \cite{bernstein2009introduction} a short comparison with the RSA which should be summed up here shortly. 
+In most cases the abstract term ``efficiency'' consists of time- and space efficiency. Daniel J. Bernstein made \cite{bernstein2009introduction} a short comparison with  RSA which will be summed up here briefly. 
 
-\paragraph*{Time effciency} is seen as time needed to perform the key generation, encryption and decryption. More precisely the different ``operations'' executed and their complexity are reviewed. 
+\paragraph*{Time effciency} is seen as the time needed to perform the key generation, encryption and decryption. More precisely, the different ``operations'' executed and their complexity are reviewed. 
 
-Compared to RSA the McEliece is quite time efficient. As described in \autoref{mceliece} the main computations are matrix operations in the binary field, which can be broken down to highly efficient additions, multiplications, shifts etc. for which no special hardware requirements are needed\cite{bernstein2009introduction}.
+Compared to RSA, McEliece is quite time efficient. As described in \autoref{mceliece}, the main computations are matrix operations in the binary field, which can be broken down to highly efficient additions, multiplications, shifts etc. for which no special hardware requirements are needed\cite{bernstein2009introduction}.
 \todo{ggf gegensatz zu rsa beschreiben}
 
-\paragraph*{Space efficiency} \label{space_efficiency} refers to the storage needed to be provided in order to execute the algorithm. In our case the bytes needed to transmit the public key to the encryption entity or signer additionally is an important topic. 
+\paragraph*{Space efficiency} \label{space_efficiency} refers to the storage needed to be provided in order to execute the algorithm. In our case, the bytes needed to transmit the public key to the encryption entity or signer is an important topic. \cite{bernstein2009introduction}
 
-Is most important drawback is the key sizes to be transferred. With $n$ denoted as code length respectively key length McEliece needs about $b^2*(lg b)^2$ bits whereas the RSA only needs $(\approx 0,16)*b^3/(lg b)^2$ bits. One might notice the higher exponent in RSA formular which leads to an faster growing key space if the security level goes to $\infty$ but the break even point \todo{heißt das so??} is fare beyond practical relevant key sizes. For keys assumed as secure in these days the McEliece key is size is about 10 times higher than RSA\footnote{Assuming unoptimized but optimal algorithms without attention of quantum computers.}. Refer also to \autoref{keylength} for a deeper view on keylenght with different parameters.
+The most important drawback is the key sizes to be transferred. With $n$ denoted as code length, respectively key length, McEliece needs about $b^2*(lg b)^2$ bits whereas the RSA only needs $(\approx 0,16)*b^3/(lg b)^2$ bits. One might notice the higher exponent in the RSA formula which leads to an faster growing key space if the security level goes to $\infty$ but this point where the RSA key size is higher than the one of McEliece is far beyond practical relevant key sizes. For keys assumed as secure for today’s proposal the McEliece key is size is about 10 times larger than RSA\footnote{Assuming unoptimized but optimal algorithms without the attention of quantum computers.}. Refer also to \autoref{keylength} for a closer look at keylenght with different parameters.\cite{bernstein2009introduction}
 
 \paragraph*{Usability}
-The last important point is to provide an usable interface for the cryptosystem. New crypto protocols can only be successful if many applications in different domains are supporting them. Therefore padding scheme like addressed in \autoref{confidence} has to be provided and standardised to make sure that different software systems on different platforms can speak to each other. 
+The last important point is to provide an usable interface for the cryptosystem. New crypto protocols can only be successful if many applications in different domains are supporting them. Therefore, a padding schemes, as addressed in \autoref{confidence}, has to be provided and standardised to make sure that different software systems on different platforms can speak to each other. \cite{bernstein2009introduction}
 
 \subsection*{Wild McEliece} %oder optimizing MCE
-Due to the fact that the McEliece cryptosystem was published over 30 years ago and still is one of the most promising post quantum security algorithms many variants came up. Many of the previous described issues could be solved by reducing the key space. In conclusion this means optimising on the used codes. Many codes like Reed-Solomon codes, quasi dyadic codes, and variants of Goppa codes have been tried, seen as secure and been broken a little later. 
+Due to the fact that the McEliece cryptosystem was published over 30 years ago and still is one of the most promising post quantum security algorithms, many variants came up. Many of the previously described issues could be solved by reducing the key space. In conclusion, this means optimising on the used codes. Many codes like Reed-Solomon codes, quasi dyadic codes, and variants of Goppa codes have been tried, seen as secure and been broken a little later. 
 
 %\subsubsection*{}
-The most promising optimization is idea of using ``wild'' Goppa codes\cite{bernstein2010wild}. Wild Goppa codes are codes which are no longer over a field $F_2$ but on $F_q$ with $q$ as small prime number. These approach was broken by generating the squeare code of the public key and revealing information of the original private key, because the square product lines are not equally distributed compared to the binary code. In \cite{yang2011post} the approach wild McEliece idea is improved with an ``incognito'' variant. As the name says the wild Goppa codes are hidden by multiplying a extra factor $f$ to the code and by using only special codes described in \cite{berger2005mask}. This topic and the question if squaring technique is still considerable for the incognito version, is still a topic of research. 
+The most promising optimization is the idea of using ``wild'' Goppa codes\cite{bernstein2010wild}. Wild Goppa codes are codes which are no longer over a field $F_2$ but on $F_q$ with $q$ as a small prime number. This approach was broken by generating the square code of the public key and revealing information about the original private key, because the square product lines are not equally distributed compared to the binary code. In \cite{yang2011post}, the wild McEliece idea is improved with an ``incognito'' variant. As the name says, the wild Goppa codes are hidden by multiplying an extra factor $f$ to the code and by using only special codes described in \cite{berger2005mask}. This topic and the question if squaring technique is still considerable for the incognito version, is still a topic of research. 
 
 
 
 \section{Conclusion}
-The topic of this work was to present an basic introduction on postquantum cryptography with focus on the McElice cryptosystem. With basic information of the underlying Goppa codes a deeper view on the algorithm was given supported by an example computation. Moreover special properties and downside were lighted. 
+\label{conclu}
+The aim of this work was to present a basic introduction on postquantum cryptography focussing on the McElice cryptosystem. With basic information of the underlying Goppa codes a closer look at the algorithm was taken supported by an example computation. Moreover, special properties and disadvantages were highlighted. 
 
-In conclusion the McEliece cryptosystem stays one of the most promissing canditates for a post quantum cryptography and is still an huge topic of research as the literature references show. Never the less there are huge downsides, especially the large keysize and with a view on the practical usability. 
+In conclusion, the McEliece cryptosystem remains one of the most promising candidates for a post quantum cryptography and is still an huge topic of research as the literature references show. Nevertheless, there are grave obstacles, especially the large keysize and in relation to the practical usability. 
 %In this paper a broad overview on the topic of 
 % presented a broad overview 
 % based on recent papers
